@@ -149,6 +149,8 @@
 
    :dynamic-filter-spec {:id :coll
 
+                         :open true
+
                          ;; dynamic components
                          :components {}
 
@@ -218,12 +220,110 @@
                                             :visible true
                                             :options [{:value "latest" :label "High growth companies" :filter scaleup-filter}
                                                       ]}
-                                           ]
+
+                                           {:id :segment_ib
+                                            :type :tag-checkboxes
+                                            :label "Segment - IB"
+                                            :sorted false
+                                            :visible false
+                                            :controls true
+                                            :tag-type "bis_l1p1_sector"
+                                            :tags [{:value "IBA" :label "Bio fuels"}
+                                                   {:value "IBB" :label "Environmental"}
+                                                   {:value "IBC" :label "Food/Drink"}
+                                                   {:value "IBD" :label "Commodity Chemicals"}
+                                                   {:value "IBE" :label "Fine & Speciality Chemicals"}
+                                                   {:value "IBF" :label "Pharmaceutical Intermediaries"}
+                                                   {:value "IBG" :label "Personal Care/ Cosmetics"}
+                                                   {:value "IBH" :label "Specialist Services"}
+                                                   {:value "IBI" :label "Agro-Industry"}
+                                                   {:value "IBX" :label "Specialist Services"}
+                                                   ]}
+
+                                           {:id :segment-mb
+                                            :type :tag-checkboxes
+                                            :label "Segment - MB"
+                                            :sorted false
+                                            :visible false
+                                            :controls true
+                                            :tag-type "bis_l1p1_sector"
+                                            :tags [{:value "MBA" :label "Antibodies"}
+                                                   {:value "MBB" :label "Therapeutic Proteins"}
+                                                   {:value "MBC" :label "Advanced Therapy Medicinal Products (ATMPs)"}
+                                                   {:value "MBD" :label "Vaccines"}
+                                                   {:value "MBE" :label "Small Molecules"}
+                                                   {:value "MBF" :label "Blood & Tissue Products"}
+                                                   {:value "MBG" :label "Specialist Services"}
+                                                   {:value "MBX" :label "Specialist Suppliers/Supply Chain"}
+                                                   {:value "MBZ" :label "MB - Unclassified "}
+                                                   ]}
+
+                                           {:id :segment-mt
+                                            :type :tag-checkboxes
+                                            :label "Segment - MT"
+                                            :sorted false
+                                            :visible false
+                                            :controls true
+                                            :tag-type "bis_l1p1_sector"
+                                            :tags [{:value "MTA" :label "Wound Care and Management "}
+                                                   {:value "MTB" :label "In vitro diagnostic technology"}
+                                                   {:value "MTC" :label "Radiotherapy equipment"}
+                                                   {:value "MTD" :label "Medical Imaging/Ultrasound Equipment and Materials"}
+                                                   {:value "MTE" :label "Anaesthetic and respiratory technology"}
+                                                   {:value "MTF" :label "Orthopaedic Devices"}
+                                                   {:value "MTG" :label "Cardiovascular and vascular devices"}
+                                                   {:value "MTH" :label "Neurology"}
+                                                   {:value "MTI" :label "Ophthalmic Devices/Equipment"}
+                                                   {:value "MTJ" :label "Dental and maxillofacial technology"}
+                                                   {:value "MTK" :label "Drug Delivery"}
+                                                   {:value "MTL" :label "Infection Control "}
+                                                   {:value "MTM" :label "Surgical Instruments (reusable) n.e.c."}
+                                                   {:value "MTN" :label "Single use technology n.e.c."}
+                                                   {:value "MTO" :label "Re-usable diagnostic or analytic equipment n.e.c."}
+                                                   {:value "MTP" :label "Implantable devices n.e.c."}
+                                                   {:value "MTQ" :label "Assistive Technology"}
+                                                   {:value "MTR" :label "Mobility Access"}
+                                                   {:value "MTS" :label "Hospital hardware including ambulatory"}
+                                                   {:value "MTT" :label "ICT+ E-health"}
+                                                   {:value "MTU" :label "Professional services, Consultancy"}
+                                                   {:value "MTV" :label "Education and Training"}
+                                                   {:value "MTX" :label "Specialist Suppliers/Supply Chain"}
+                                                   {:value "MTZ" :label "MT - Unclassified "}
+                                                   ]}
+
+                                           {:id :segment-ph
+                                            :type :tag-checkboxes
+                                            :label "Segment - PH"
+                                            :sorted false
+                                            :visible false
+                                            :controls true
+                                            :tag-type "bis_l1p1_sector"
+                                            :tags [{:value "PHA" :label "Antibodies"}
+                                                   {:value "PHB" :label "Therapeutic Proteins"}
+                                                   {:value "PHC" :label "Advanced Therapy Medicinal Products (ATMPs)"}
+                                                   {:value "PHD" :label "Vaccines"}
+                                                   {:value "PHE" :label "Small Molecules"}
+                                                   {:value "PHF" :label "Blood & Tissue Products"}
+                                                   {:value "PHG" :label "Specialist Services"}
+                                                   {:value "PHX" :label "Specialist Services"}
+                                                   {:value "PHZ" :label "PH - Unclassified"}
+                                                   ]}
+
+                                           {:id :segment_nd
+                                            :type :tag-checkboxes
+                                            :label "Segment - no data"
+                                            :sorted false
+                                            :visible false
+                                            :tag-type "bis_l1p1_sector"
+                                            :tags [{:value "no_data" :label "No data"}
+                                                   ]}
+
+]
 
                          ;; base-filters AND combined with dynamic components
                          }
 
-   :dynamic-filter-description-components [:boundaryline :age :total-funding :sector :ds :hub :latest-turnover :highgrowth]
+   :dynamic-filter-description-components [:boundaryline :uk_region :sector :highgrowth :segment_ib :segment-mb :segment-mt :segment-ph:segment_nd]
 
    :selection-filter-spec {:id :selection-filter
                            :components {:natural_id nil}
@@ -412,7 +512,7 @@
                                                             :render-fn (fn [v] (num/mixed v))}
                                                            {:key :!latest_turnover
                                                             :metric :sum
-                                                            :label "Total turnover"
+                                                            :label (fn [] [:p "Total latest turnover\u00A0" [:small "(UK-wide)"]])
                                                             :render-fn (fn [v] (num/mixed v {:curr "£"}))}
                                                            {:key :!latest_turnover_delta
                                                             :belongs-to :!latest_turnover
@@ -422,10 +522,10 @@
                                                             :render-fn (fn [v] [:div.stat-change
                                                                                 (sign-icon v)
                                                                                 (num/mixed v)
-                                                                                "%"])}
+                                                                                "% y-o-y"])}
                                                            {:key :!latest_employee_count
                                                             :metric :sum
-                                                            :label "Total employees"
+                                                            :label (fn [] [:p "Total latest employees\u00A0" [:small "(UK-wide)"]])
                                                             :render-fn (fn [v] (num/mixed v))}
                                                            {:key :!latest_employee_count_delta
                                                             :belongs-to :!latest_employee_count
@@ -435,7 +535,7 @@
                                                             :render-fn (fn [v] [:div.stat-change
                                                                                 (sign-icon v)
                                                                                 (num/mixed v)
-                                                                                "%"])}
+                                                                                "% y-o-y"])}
                                                            ]}}
                     :summary-stats nil
                     }
@@ -452,12 +552,12 @@
                                  ;; {:key :!latest_accounts_date :label "Filing date" :render-fn #(time/format-date %)}
                                  {:key :!latest_turnover
                                   :sortable true
-                                  :label "Turnover"
+                                  :label (fn [] [:div "Latest turnover\u0020" [:small "(UK-wide)"]])
                                   :right-align true
                                   :render-fn #(num/mixed %)}
                                  {:key :!latest_turnover_delta
                                   :sortable true
-                                  :label "Turn. change"
+                                  :label "Turn. change y-o-y"
                                   :right-align true
                                   :render-fn (fn [v r]
                                                (let [pv (-! (:!latest_turnover r) v)
@@ -468,12 +568,12 @@
                                                     (sign-icon v)])))}
                                  {:key :!latest_employee_count
                                   :sortable true
-                                  :label "Employees"
+                                  :label (fn [] [:div "Latest employees\u0020" [:small "(UK-wide)"]])
                                   :right-align true
                                   :render-fn #(num/mixed %)}
                                  {:key :!latest_employee_count_delta
                                   :sortable true
-                                  :label "Emp. change"
+                                  :label "Emp. change y-o-y"
                                   :right-align true
                                   :render-fn (fn [v r]
                                                (let [pv (-! (:!latest_employee_count r) v)
@@ -489,7 +589,7 @@
    :trends-timeline {:query {:index-name "company-accounts"
                              :index-type "accounts"
                              :time-variable "?accounts_date"
-                             :metrics {:variable :!turnover :title "Turnover (£)" :metric :sum}
+                             :metrics {:variable :!turnover :title "Latest turnover (UK-wide) (£)" :metric :sum}
                              :interval "year"
                              :before "2013-01-01"}
                      :color "#28828a"
@@ -498,18 +598,18 @@
    :company-turnover-timeline {:query {:index-name "company-accounts"
                                        :index-type "accounts"
                                        :time-variable "?accounts_date"
-                                       :metrics {:variable :!turnover :title "Turnover (£)"}
+                                       :metrics {:variable :!turnover :title "Latest turnover (UK-wide) (£)"}
                                        :interval "year"
-                                       :before (time/today-str)}
+                                       :before "2013-01-01"}
                                :color "#28828a"
                                :timeline-data nil}
 
    :company-employment-timeline {:query {:index-name "company-accounts"
                                          :index-type "accounts"
                                          :time-variable "?accounts_date"
-                                         :metrics {:variable :!employee_count :title "Employees"}
+                                         :metrics {:variable :!employee_count :title "Latest employees (UK-wide)"}
                                          :interval "year"
-                                         :before (time/today-str)}
+                                         :before "2013-01-01"}
                                  :color "#28828a"
                                  :timeline-data nil}
 
@@ -523,7 +623,7 @@
                               :nested-filter {:term {:type "l4_sector"}}
                               :stats-attr "!latest_turnover"}
                       :metrics [{:metric :sum
-                                 :title "Total turnover (£)"
+                                 :title "Total latest turnover (UK-wide) (£)"
                                  :label-formatter (fn [] (this-as this (num/mixed (.-value this))))}]
                       :bar-width 20
                       :bar-color "#28828a"
@@ -537,7 +637,7 @@
 
                               :color "#28828a"
 
-                              :rows [{:key "latest" :label "2013/2014"}]
+                              :rows [{:key "latest" :label "latest reported"}]
                               :row-path [:accounts :row]
                               :row-aggs {:accounts
                                          {:nested {:path "?accounts"}
@@ -579,7 +679,7 @@
 
                                  :color "#28828a"
 
-                                 :rows [{:key "latest" :label "2013/2014"}]
+                                 :rows [{:key "latest" :label "latest reported"}]
                                  :row-path [:accounts :row]
                                  :row-aggs {:accounts
                                             {:nested {:path "?accounts"}
@@ -723,8 +823,8 @@
     :f (partial
         select-chooser/select-chooser-component
         "Variable"
-        [{:value "!latest_turnover" :label "Total turnover (£)"}
-         {:value "!latest_employee_count" :label "Total employees"}
+        [{:value "!latest_turnover" :label "Total latest turnover (UK-wide) (£)"}
+         {:value "!latest_employee_count" :label "Total latest employees (UK-wide)"}
          {:value "?counter" :label "Number of companies"}]
         (fn
           ([cursor] (get-in cursor [:query :stats-attr]))
@@ -756,8 +856,8 @@
     :f (partial
         select-chooser/select-chooser-component
         "Variable"
-        [{:value :!turnover :label "Turnover (£)"}
-         {:value :!employee_count :label "Employees"}]
+        [{:value :!turnover :label "Latest turnover (UK-wide) (£)"}
+         {:value :!employee_count :label "Latest employees (UK-wide)"}]
         (fn
           ([cursor] (get-in cursor [:query :metrics :variable]))
           ([cursor record]
