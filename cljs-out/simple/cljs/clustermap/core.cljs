@@ -444,11 +444,11 @@
                                        :variable "!latest_employee_count"
                                        ;; :scale-attr "population"
                                        }
-                    :colorchooser {:scheme ["#990000"]
+                    :colorchooser {:scheme [:Reds :6]
                                    :scale :auto
                                    :variable :boundaryline_id_doc_count}
 
-                    :boundaryline-fill-opacity 0.05
+                    :boundaryline-fill-opacity 0.4
 
                     :geohash-aggs {:query {:index-name "companies"
                                            :index-type "company"
@@ -778,10 +778,10 @@
     :paths {:map-state [:map]
             :filter [:dynamic-filter-spec :composed :all]}}
 
-   ;; {:name :color-scale
-   ;;  :f color-scale/color-scale-component
-   ;;  :target "color-scale-component"
-   ;;  :path [:map :controls :threshold-colors]}
+   {:name :color-scale
+    :f color-scale/color-scale-component
+    :target "color-scale-component"
+    :path [:map :controls]}
 
    {:name :company-close
     :f nav-button/nav-button-component
