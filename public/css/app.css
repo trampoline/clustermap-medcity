@@ -2785,6 +2785,15 @@ button.close {
     padding: 20px 15px;
   }
 }
+.leaflet-container {
+  font-family: "PT Sans", Helvetica, Arial, sans-serif;
+}
+.leaflet-container p {
+  font-family: "PT Sans", Helvetica, Arial, sans-serif;
+}
+.leaflet-container a {
+  font-family: "PT Sans", Helvetica, Arial, sans-serif;
+}
 .map-marker-1 {
   background-position: 0 0;
 }
@@ -3568,7 +3577,7 @@ h1.logo {
   line-height: 12px;
   white-space: nowrap;
   font-size: 12px!important;
-  margin: 0px;
+  margin: 1px 1px 1px 1px;
 }
 .marker-info .minichart {
   width: 60px;

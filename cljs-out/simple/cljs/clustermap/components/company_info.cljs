@@ -30,7 +30,7 @@
   (let [prev (-! base change)]
     (when (and change base (not= 0 prev))
       (let [v (*! 100 (div! change prev))]
-        [:div.stat-change (sign-icon v) [:span (num/mixed v) "%"]]))))
+        [:div.stat-change (sign-icon v) [:span (num/mixed v) "% y-o-y"]]))))
 
 (defn render*
   [record
@@ -55,7 +55,11 @@
           [:li
            [:h4 "Sector"]
            [:p
-            (some->> record :tags (filter #(= "broad_12_sectors" (:type %))) first :description)]]
+            (some->> record :tags (filter #(= "l4_sector" (:type %))) first :description)]]
+          [:li
+           [:h4 "Segment"]
+           [:p
+            (some->> record :tags (filter #(= "bis_l1p1_sector" (:type %))) first :description)]]
           (when (:web_url record)
             [:li
              [:h4 "Website"
@@ -79,7 +83,7 @@
       [:div.panel
        [:div.panel-body
         [:div.chart-heading
-         [:h4.stat-title "Turnover"]
+         [:h4.stat-title "Latest turnover\u0020" [:small "(UK-wide)"]]
          [:div.stat-amount [:small "£"] (num/mixed (:latest_turnover record))]
          (stat-change (:latest_turnover record) (:latest_turnover_delta record))]
         [:div.chart-container-lg
@@ -89,7 +93,7 @@
       [:div.panel
        [:div.panel-body
         [:div.chart-heading
-         [:h4.stat-title "Employment"]
+         [:h4.stat-title "Latest employment\u0020" [:small "(UK-wide)"]]
          [:div.stat-amount (num/mixed (:latest_employee_count record))]
          (stat-change (:latest_employee_count record) (:latest_employee_count_delta record))]
         [:div.chart-container-lg
