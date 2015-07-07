@@ -9,6 +9,7 @@
             [sablono.core :as html :refer-macros [html]]
             [clustermap.api :as api]
             [clustermap.formats.number :as num :refer [div! *! -! +!]]
+            [clustermap.formats.url :as url]
             [clustermap.formats.money :as money]
             [clustermap.formats.time :as time]
             [clustermap.components.timeline-chart :as timeline-chart]))
@@ -64,7 +65,9 @@
             [:li
              [:h4 "Website"
               [:p
-               [:a {:href (:web_url record) :target "_blank"} (:web_url record)]]]])]]]]
+               [:a {:href (url/clean-http-url (:web_url record))
+                    :target "_blank"}
+                (:web_url record)]]]])]]]]
 
       [:div.panel
        [:div.panel-body
