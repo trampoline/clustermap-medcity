@@ -221,9 +221,9 @@
                                             :options [{:value "latest" :label "High growth companies" :filter scaleup-filter}
                                                       ]}
 
-                                           {:id :segment_ib
+                                           {:id :segments
                                             :type :tag-checkboxes
-                                            :label "Segment - IB"
+                                            :label "Segments"
                                             :sorted false
                                             :visible false
                                             :controls true
@@ -238,16 +238,7 @@
                                                    {:value "IBH" :label "Specialist Services"}
                                                    {:value "IBI" :label "Agro-Industry"}
                                                    {:value "IBX" :label "Specialist Services"}
-                                                   ]}
-
-                                           {:id :segment-mb
-                                            :type :tag-checkboxes
-                                            :label "Segment - MB"
-                                            :sorted false
-                                            :visible false
-                                            :controls true
-                                            :tag-type "bis_l1p1_sector"
-                                            :tags [{:value "MBA" :label "Antibodies"}
+                                                   {:value "MBA" :label "Antibodies"}
                                                    {:value "MBB" :label "Therapeutic Proteins"}
                                                    {:value "MBC" :label "Advanced Therapy Medicinal Products (ATMPs)"}
                                                    {:value "MBD" :label "Vaccines"}
@@ -255,17 +246,8 @@
                                                    {:value "MBF" :label "Blood & Tissue Products"}
                                                    {:value "MBG" :label "Specialist Services"}
                                                    {:value "MBX" :label "Specialist Suppliers/Supply Chain"}
-                                                   {:value "MBZ" :label "MB - Unclassified "}
-                                                   ]}
-
-                                           {:id :segment-mt
-                                            :type :tag-checkboxes
-                                            :label "Segment - MT"
-                                            :sorted false
-                                            :visible false
-                                            :controls true
-                                            :tag-type "bis_l1p1_sector"
-                                            :tags [{:value "MTA" :label "Wound Care and Management "}
+                                                   {:value "MBZ" :label "Medical Biotechnology - Unclassified "}
+                                                   {:value "MTA" :label "Wound Care and Management "}
                                                    {:value "MTB" :label "In vitro diagnostic technology"}
                                                    {:value "MTC" :label "Radiotherapy equipment"}
                                                    {:value "MTD" :label "Medical Imaging/Ultrasound Equipment and Materials"}
@@ -288,17 +270,8 @@
                                                    {:value "MTU" :label "Professional services, Consultancy"}
                                                    {:value "MTV" :label "Education and Training"}
                                                    {:value "MTX" :label "Specialist Suppliers/Supply Chain"}
-                                                   {:value "MTZ" :label "MT - Unclassified "}
-                                                   ]}
-
-                                           {:id :segment-ph
-                                            :type :tag-checkboxes
-                                            :label "Segment - PH"
-                                            :sorted false
-                                            :visible false
-                                            :controls true
-                                            :tag-type "bis_l1p1_sector"
-                                            :tags [{:value "PHA" :label "Antibodies"}
+                                                   {:value "MTZ" :label "Medical Technology - Unclassified "}
+                                                   {:value "PHA" :label "Antibodies"}
                                                    {:value "PHB" :label "Therapeutic Proteins"}
                                                    {:value "PHC" :label "Advanced Therapy Medicinal Products (ATMPs)"}
                                                    {:value "PHD" :label "Vaccines"}
@@ -306,24 +279,15 @@
                                                    {:value "PHF" :label "Blood & Tissue Products"}
                                                    {:value "PHG" :label "Specialist Services"}
                                                    {:value "PHX" :label "Specialist Services"}
-                                                   {:value "PHZ" :label "PH - Unclassified"}
+                                                   {:value "PHZ" :label "Pharmaceutical - Unclassified"}
+                                                   {:value "no_data" :label "No data"}
                                                    ]}
-
-                                           {:id :segment_nd
-                                            :type :tag-checkboxes
-                                            :label "Segment - no data"
-                                            :sorted false
-                                            :visible false
-                                            :tag-type "bis_l1p1_sector"
-                                            :tags [{:value "no_data" :label "No data"}
-                                                   ]}
-
-]
+                                           ]
 
                          ;; base-filters AND combined with dynamic components
                          }
 
-   :dynamic-filter-description-components [:boundaryline :uk_region :sector :highgrowth :segment_ib :segment-mb :segment-mt :segment-ph:segment_nd]
+   :dynamic-filter-description-components [:boundaryline :uk_region :sector :highgrowth :segments ]
 
    :selection-filter-spec {:id :selection-filter
                            :components {:natural_id nil}
