@@ -486,7 +486,7 @@
                                                             :render-fn (fn [v] [:div.stat-change
                                                                                 (sign-icon v)
                                                                                 (num/mixed v)
-                                                                                "% y-o-y"])}
+                                                                                "% year on year"])}
                                                            {:key :!latest_employee_count
                                                             :metric :sum
                                                             :label (fn [] [:p "Total latest employees\u00A0" [:small "(UK-wide)"]])
@@ -499,7 +499,7 @@
                                                             :render-fn (fn [v] [:div.stat-change
                                                                                 (sign-icon v)
                                                                                 (num/mixed v)
-                                                                                "% y-o-y"])}
+                                                                                "% year on year"])}
                                                            ]}}
                     :summary-stats nil
                     }
@@ -521,7 +521,7 @@
                                   :render-fn #(num/mixed %)}
                                  {:key :!latest_turnover_delta
                                   :sortable true
-                                  :label "Turn. change y-o-y"
+                                  :label (fn [] [:div "Turnover change\u0020" [:small "(year on year)"]])
                                   :right-align true
                                   :render-fn (fn [v r]
                                                (let [pv (-! (:!latest_turnover r) v)
@@ -537,7 +537,7 @@
                                   :render-fn #(num/mixed %)}
                                  {:key :!latest_employee_count_delta
                                   :sortable true
-                                  :label "Emp. change y-o-y"
+                                  :label (fn [] [:div "Employees change\u0020" [:small "(year on year)"]])
                                   :right-align true
                                   :render-fn (fn [v r]
                                                (let [pv (-! (:!latest_employee_count r) v)
@@ -553,7 +553,7 @@
    :trends-timeline {:query {:index-name "company-accounts"
                              :index-type "accounts"
                              :time-variable "?accounts_date"
-                             :metrics {:variable :!turnover :title "Latest turnover (UK-wide) (£)" :metric :sum}
+                             :metrics {:variable :!turnover :title "Turnover (UK-wide) (£)" :metric :sum}
                              :interval "year"
                              :before "2013-01-01"}
                      :color "#28828a"
@@ -562,7 +562,7 @@
    :company-turnover-timeline {:query {:index-name "company-accounts"
                                        :index-type "accounts"
                                        :time-variable "?accounts_date"
-                                       :metrics {:variable :!turnover :title "Latest turnover (UK-wide) (£)"}
+                                       :metrics {:variable :!turnover :title "Turnover (UK-wide, grouped by reported year) (£)"}
                                        :interval "year"
                                        :before "2013-01-01"}
                                :color "#28828a"
@@ -571,7 +571,7 @@
    :company-employment-timeline {:query {:index-name "company-accounts"
                                          :index-type "accounts"
                                          :time-variable "?accounts_date"
-                                         :metrics {:variable :!employee_count :title "Latest employees (UK-wide)"}
+                                         :metrics {:variable :!employee_count :title "Employees (UK-wide, grouped by reported year)"}
                                          :interval "year"
                                          :before "2013-01-01"}
                                  :color "#28828a"
@@ -590,6 +590,7 @@
                                  :title "Total latest turnover (UK-wide) (£)"
                                  :label-formatter (fn [] (this-as this (num/mixed (.-value this))))}]
                       :bar-width 20
+                      :chart-height 200
                       :bar-color "#28828a"
 
                       :tag-type "l4_sector"
@@ -818,8 +819,8 @@
     :f (partial
         select-chooser/select-chooser-component
         "Variable"
-        [{:value :!turnover :label "Latest turnover (UK-wide) (£)"}
-         {:value :!employee_count :label "Latest employees (UK-wide)"}]
+        [{:value :!turnover :label "Turnover (UK-wide) (£)"}
+         {:value :!employee_count :label "Employees (UK-wide)"}]
         (fn
           ([cursor] (get-in cursor [:query :metrics :variable]))
           ([cursor record]

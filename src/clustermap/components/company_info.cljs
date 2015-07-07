@@ -31,7 +31,7 @@
   (let [prev (-! base change)]
     (when (and change base (not= 0 prev))
       (let [v (*! 100 (div! change prev))]
-        [:div.stat-change (sign-icon v) [:span (num/mixed v) "% y-o-y"]]))))
+        [:div.stat-change (sign-icon v) [:span (num/mixed v) "% year on year"]]))))
 
 (defn render*
   [record
