@@ -2785,6 +2785,10 @@ button.close {
     padding: 20px 15px;
   }
 }
+.panel-heading h4 small {
+  display: block;
+  color: black;
+}
 .leaflet-container {
   font-family: "PT Sans", Helvetica, Arial, sans-serif;
 }
@@ -3668,6 +3672,9 @@ h1.logo {
 .marker-cluster span {
   font-size: 12px!important;
   line-height: 30px;
+}
+#table-component thead tr th small {
+  display: block;
 }
 
 

@@ -9,6 +9,7 @@
             [sablono.core :as html :refer-macros [html]]
             [clustermap.api :as api]
             [clustermap.formats.number :as num :refer [div! *! -! +!]]
+            [clustermap.formats.url :as url]
             [clustermap.formats.money :as money]
             [clustermap.formats.time :as time]
             [clustermap.components.timeline-chart :as timeline-chart]))
@@ -30,7 +31,7 @@
   (let [prev (-! base change)]
     (when (and change base (not= 0 prev))
       (let [v (*! 100 (div! change prev))]
-        [:div.stat-change (sign-icon v) [:span (num/mixed v) "% y-o-y"]]))))
+        [:div.stat-change (sign-icon v) [:span (num/mixed v) "% year on year"]]))))
 
 (defn render*
   [record
@@ -64,7 +65,9 @@
             [:li
              [:h4 "Website"
               [:p
-               [:a {:href (:web_url record) :target "_blank"} (:web_url record)]]]])]]]]
+               [:a {:href (url/clean-http-url (:web_url record))
+                    :target "_blank"}
+                (:web_url record)]]]])]]]]
 
       [:div.panel
        [:div.panel-body

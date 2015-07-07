@@ -221,9 +221,9 @@
                                             :options [{:value "latest" :label "High growth companies" :filter scaleup-filter}
                                                       ]}
 
-                                           {:id :segment_ib
+                                           {:id :segments
                                             :type :tag-checkboxes
-                                            :label "Segment - IB"
+                                            :label "Segments"
                                             :sorted false
                                             :visible false
                                             :controls true
@@ -238,16 +238,7 @@
                                                    {:value "IBH" :label "Specialist Services"}
                                                    {:value "IBI" :label "Agro-Industry"}
                                                    {:value "IBX" :label "Specialist Services"}
-                                                   ]}
-
-                                           {:id :segment-mb
-                                            :type :tag-checkboxes
-                                            :label "Segment - MB"
-                                            :sorted false
-                                            :visible false
-                                            :controls true
-                                            :tag-type "bis_l1p1_sector"
-                                            :tags [{:value "MBA" :label "Antibodies"}
+                                                   {:value "MBA" :label "Antibodies"}
                                                    {:value "MBB" :label "Therapeutic Proteins"}
                                                    {:value "MBC" :label "Advanced Therapy Medicinal Products (ATMPs)"}
                                                    {:value "MBD" :label "Vaccines"}
@@ -255,17 +246,8 @@
                                                    {:value "MBF" :label "Blood & Tissue Products"}
                                                    {:value "MBG" :label "Specialist Services"}
                                                    {:value "MBX" :label "Specialist Suppliers/Supply Chain"}
-                                                   {:value "MBZ" :label "MB - Unclassified "}
-                                                   ]}
-
-                                           {:id :segment-mt
-                                            :type :tag-checkboxes
-                                            :label "Segment - MT"
-                                            :sorted false
-                                            :visible false
-                                            :controls true
-                                            :tag-type "bis_l1p1_sector"
-                                            :tags [{:value "MTA" :label "Wound Care and Management "}
+                                                   {:value "MBZ" :label "Medical Biotechnology - Unclassified "}
+                                                   {:value "MTA" :label "Wound Care and Management "}
                                                    {:value "MTB" :label "In vitro diagnostic technology"}
                                                    {:value "MTC" :label "Radiotherapy equipment"}
                                                    {:value "MTD" :label "Medical Imaging/Ultrasound Equipment and Materials"}
@@ -288,17 +270,8 @@
                                                    {:value "MTU" :label "Professional services, Consultancy"}
                                                    {:value "MTV" :label "Education and Training"}
                                                    {:value "MTX" :label "Specialist Suppliers/Supply Chain"}
-                                                   {:value "MTZ" :label "MT - Unclassified "}
-                                                   ]}
-
-                                           {:id :segment-ph
-                                            :type :tag-checkboxes
-                                            :label "Segment - PH"
-                                            :sorted false
-                                            :visible false
-                                            :controls true
-                                            :tag-type "bis_l1p1_sector"
-                                            :tags [{:value "PHA" :label "Antibodies"}
+                                                   {:value "MTZ" :label "Medical Technology - Unclassified "}
+                                                   {:value "PHA" :label "Antibodies"}
                                                    {:value "PHB" :label "Therapeutic Proteins"}
                                                    {:value "PHC" :label "Advanced Therapy Medicinal Products (ATMPs)"}
                                                    {:value "PHD" :label "Vaccines"}
@@ -306,24 +279,15 @@
                                                    {:value "PHF" :label "Blood & Tissue Products"}
                                                    {:value "PHG" :label "Specialist Services"}
                                                    {:value "PHX" :label "Specialist Services"}
-                                                   {:value "PHZ" :label "PH - Unclassified"}
+                                                   {:value "PHZ" :label "Pharmaceutical - Unclassified"}
+                                                   {:value "no_data" :label "No data"}
                                                    ]}
-
-                                           {:id :segment_nd
-                                            :type :tag-checkboxes
-                                            :label "Segment - no data"
-                                            :sorted false
-                                            :visible false
-                                            :tag-type "bis_l1p1_sector"
-                                            :tags [{:value "no_data" :label "No data"}
-                                                   ]}
-
-]
+                                           ]
 
                          ;; base-filters AND combined with dynamic components
                          }
 
-   :dynamic-filter-description-components [:boundaryline :uk_region :sector :highgrowth :segment_ib :segment-mb :segment-mt :segment-ph:segment_nd]
+   :dynamic-filter-description-components [:boundaryline :uk_region :sector :highgrowth :segments ]
 
    :selection-filter-spec {:id :selection-filter
                            :components {:natural_id nil}
@@ -522,7 +486,7 @@
                                                             :render-fn (fn [v] [:div.stat-change
                                                                                 (sign-icon v)
                                                                                 (num/mixed v)
-                                                                                "% y-o-y"])}
+                                                                                "% year on year"])}
                                                            {:key :!latest_employee_count
                                                             :metric :sum
                                                             :label (fn [] [:p "Total latest employees\u00A0" [:small "(UK-wide)"]])
@@ -535,7 +499,7 @@
                                                             :render-fn (fn [v] [:div.stat-change
                                                                                 (sign-icon v)
                                                                                 (num/mixed v)
-                                                                                "% y-o-y"])}
+                                                                                "% year on year"])}
                                                            ]}}
                     :summary-stats nil
                     }
@@ -557,7 +521,7 @@
                                   :render-fn #(num/mixed %)}
                                  {:key :!latest_turnover_delta
                                   :sortable true
-                                  :label "Turn. change y-o-y"
+                                  :label (fn [] [:div "Turnover change\u0020" [:small "(year on year)"]])
                                   :right-align true
                                   :render-fn (fn [v r]
                                                (let [pv (-! (:!latest_turnover r) v)
@@ -573,7 +537,7 @@
                                   :render-fn #(num/mixed %)}
                                  {:key :!latest_employee_count_delta
                                   :sortable true
-                                  :label "Emp. change y-o-y"
+                                  :label (fn [] [:div "Employees change\u0020" [:small "(year on year)"]])
                                   :right-align true
                                   :render-fn (fn [v r]
                                                (let [pv (-! (:!latest_employee_count r) v)
@@ -589,7 +553,7 @@
    :trends-timeline {:query {:index-name "company-accounts"
                              :index-type "accounts"
                              :time-variable "?accounts_date"
-                             :metrics {:variable :!turnover :title "Latest turnover (UK-wide) (£)" :metric :sum}
+                             :metrics {:variable :!turnover :title "Turnover (UK-wide) (£)" :metric :sum}
                              :interval "year"
                              :before "2013-01-01"}
                      :color "#28828a"
@@ -598,7 +562,7 @@
    :company-turnover-timeline {:query {:index-name "company-accounts"
                                        :index-type "accounts"
                                        :time-variable "?accounts_date"
-                                       :metrics {:variable :!turnover :title "Latest turnover (UK-wide) (£)"}
+                                       :metrics {:variable :!turnover :title "Turnover (UK-wide, grouped by reported year) (£)"}
                                        :interval "year"
                                        :before "2013-01-01"}
                                :color "#28828a"
@@ -607,7 +571,7 @@
    :company-employment-timeline {:query {:index-name "company-accounts"
                                          :index-type "accounts"
                                          :time-variable "?accounts_date"
-                                         :metrics {:variable :!employee_count :title "Latest employees (UK-wide)"}
+                                         :metrics {:variable :!employee_count :title "Employees (UK-wide, grouped by reported year)"}
                                          :interval "year"
                                          :before "2013-01-01"}
                                  :color "#28828a"
@@ -626,18 +590,57 @@
                                  :title "Total latest turnover (UK-wide) (£)"
                                  :label-formatter (fn [] (this-as this (num/mixed (.-value this))))}]
                       :bar-width 20
+                      :chart-height 200
                       :bar-color "#28828a"
 
                       :tag-type "l4_sector"
                       :tag-data nil
                       :tag-agg-data nil}
 
-   :revenue-bands {:controls {:index "companies"
+   :revenue-bands {:query {:index-name "companies"
+                           :index-type "company"
+
+                           :row-path [:accounts :row]
+                           :row-aggs {:accounts
+                                      {:nested {:path "?accounts"}
+
+                                       :aggs
+                                       {:row {:range {:field "rank"
+                                                      :ranges [{:key "latest" :from 1 :to 2}]}}}} }
+
+                           :col-path [:col]
+                           :col-aggs {:col
+                                      {:range {:field "turnover"
+                                               :ranges [{:key "lt50k" :from 0       :to 50000 }
+                                                        {:key "50k"   :from 50000   :to 100000 }
+                                                        {:key "100k"  :from 100000  :to 250000 }
+                                                        {:key "250k"  :from 250000  :to 500000}
+                                                        {:key "500k"  :from 500000  :to 1000000}
+                                                        {:key "1m"    :from 1000000 :to 5000000}
+                                                        {:key "5m"    :from 5000000 }] }}
+                                      :no-col-data {:missing {:field "turnover"}}}
+
+                           :metric-path [:companies :metric]
+                           :metric-aggs {:companies
+                                         {:reverse_nested {}
+                                          :aggs
+                                          {:metric {:value_count {:field "?natural_id"}}}}}
+                           }
+                   :view {:rows [{:key "latest" :label "latest reported"}]
+                          :cols [{:key "lt50k"  :label "Less than £50k"}
+                                 {:key "50k"  :label "£50k - £100k"}
+                                 {:key "100k" :label "£100k - £250k"}
+                                 {:key "250k"   :label "£250k - £500k"}
+                                 {:key "500k"  :label "£500k - £1m"}
+                                 {:key "1m"  :label "£1m - £5m"}
+                                 {:key "5m" :label "More than £5m"}]
+                          :color "#28828a"
+                          :render-fn (fn [v] (num/fnum v))}
+                   :table-data nil}
+
+   :employment-bands {:query {:index-name "companies"
                               :index-type "company"
 
-                              :color "#28828a"
-
-                              :rows [{:key "latest" :label "latest reported"}]
                               :row-path [:accounts :row]
                               :row-aggs {:accounts
                                          {:nested {:path "?accounts"}
@@ -646,78 +649,38 @@
                                           {:row {:range {:field "rank"
                                                          :ranges [{:key "latest" :from 1 :to 2}]}}}} }
 
-                              :cols [{:key "lt50k"  :label "Less than £50k"}
-                                     {:key "50k"  :label "£50k - £100k"}
-                                     {:key "100k" :label "£100k - £250k"}
-                                     {:key "250k"   :label "£250k - £500k"}
-                                     {:key "500k"  :label "£500k - £1m"}
-                                     {:key "1m"  :label "£1m - £5m"}
-                                     {:key "5m" :label "More than £5m"}]
                               :col-path [:col]
                               :col-aggs {:col
-                                         {:range {:field "turnover"
-                                                  :ranges [{:key "lt50k" :from 0       :to 50000 }
-                                                           {:key "50k"   :from 50000   :to 100000 }
-                                                           {:key "100k"  :from 100000  :to 250000 }
-                                                           {:key "250k"  :from 250000  :to 500000}
-                                                           {:key "500k"  :from 500000  :to 1000000}
-                                                           {:key "1m"    :from 1000000 :to 5000000}
-                                                           {:key "5m"    :from 5000000 }] }}}
+                                         {:range {:field "employee_count"
+                                                  :ranges [{:key "l"    :from 1    :to 5 }
+                                                           {:key "5"    :from 5    :to 10 }
+                                                           {:key "10"   :from 10   :to 20 }
+                                                           {:key "20"   :from 20   :to 50 }
+                                                           {:key "50"   :from 50   :to 100 }
+                                                           {:key "100"  :from 100  :to 250 }
+                                                           {:key "250"  :from 250  :to 500 }
+                                                           {:key "500"  :from 500  :to 2500 }
+                                                           {:key "2500" :from 2500 }] }}
+                                         :no-col-data {:missing {:field "employee_count"}}}
 
                               :metric-path [:companies :metric]
                               :metric-aggs {:companies
                                             {:reverse_nested {}
                                              :aggs
-                                             {:metric {:cardinality {:field "?natural_id"}}}}}
-                              :render-fn (fn [v] (num/fnum v))
-
+                                             {:metric {:value_count {:field "?natural_id"}}}}}
                               }
-                   :table-data nil}
-
-   :employment-bands {:controls {:index "companies"
-                                 :index-type "company"
-
-                                 :color "#28828a"
-
-                                 :rows [{:key "latest" :label "latest reported"}]
-                                 :row-path [:accounts :row]
-                                 :row-aggs {:accounts
-                                            {:nested {:path "?accounts"}
-
-                                             :aggs
-                                             {:row {:range {:field "rank"
-                                                            :ranges [{:key "latest" :from 1 :to 2}]}}}} }
-
-                                 :cols [{:key "l"    :label "1-4"}
-                                        {:key "5"    :label "5-9"}
-                                        {:key "10"   :label "10-19"}
-                                        {:key "20"   :label "20-49"}
-                                        {:key "50"   :label "50-99"}
-                                        {:key "100"  :label "100-249"}
-                                        {:key "250"  :label "250-499"}
-                                        {:key "500"  :label "500-2499"}
-                                        {:key "2500" :label "2500 or more"}]
-                                 :col-path [:col]
-                                 :col-aggs {:col
-                                            {:range {:field "employee_count"
-                                                     :ranges [{:key "l"    :from 1    :to 5 }
-                                                              {:key "5"    :from 5    :to 10 }
-                                                              {:key "10"   :from 10   :to 20 }
-                                                              {:key "20"   :from 20   :to 50 }
-                                                              {:key "50"   :from 50   :to 100 }
-                                                              {:key "100"  :from 100  :to 250 }
-                                                              {:key "250"  :from 250  :to 500 }
-                                                              {:key "500"  :from 500  :to 2500 }
-                                                              {:key "2500" :from 2500 }] }}}
-
-                                 :metric-path [:companies :metric]
-                                 :metric-aggs {:companies
-                                               {:reverse_nested {}
-                                                :aggs
-                                                {:metric {:cardinality {:field "?natural_id"}}}}}
-                                 :render-fn (fn [v] (num/fnum v))
-
-                                 }
+                      :view {:rows [{:key "latest" :label "latest reported"}]
+                             :cols [{:key "l"    :label "1-4"}
+                                    {:key "5"    :label "5-9"}
+                                    {:key "10"   :label "10-19"}
+                                    {:key "20"   :label "20-49"}
+                                    {:key "50"   :label "50-99"}
+                                    {:key "100"  :label "100-249"}
+                                    {:key "250"  :label "250-499"}
+                                    {:key "500"  :label "500-2499"}
+                                    {:key "2500" :label "2500 or more"}]
+                             :color "#28828a"
+                             :render-fn (fn [v] (num/fnum v))}
                       :table-data nil}
 
    :view :trends
@@ -856,8 +819,8 @@
     :f (partial
         select-chooser/select-chooser-component
         "Variable"
-        [{:value :!turnover :label "Latest turnover (UK-wide) (£)"}
-         {:value :!employee_count :label "Latest employees (UK-wide)"}]
+        [{:value :!turnover :label "Turnover (UK-wide) (£)"}
+         {:value :!employee_count :label "Employees (UK-wide)"}]
         (fn
           ([cursor] (get-in cursor [:query :metrics :variable]))
           ([cursor record]
