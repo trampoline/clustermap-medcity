@@ -511,25 +511,23 @@
                        :from 0
                        :size 50
                        :columns [
-                                 {:key :!name :sortable true :label "Name" :render-fn company-link-render-fn}
+                                 {:key :!name :sortable false :label "Name" :render-fn company-link-render-fn}
                                  {:key :!formation_date :sortable true :label "Formation date" :render-fn #(time/format-date %)}
                                  ;; {:key :!latest_accounts_date :label "Filing date" :render-fn #(time/format-date %)}
                                  {:key :!latest_turnover
                                   :sortable true
                                   :label (fn [] [:div "Latest turnover\u0020" [:small "(UK-wide)"]])
                                   :right-align true
-                                  :render-fn #(num/mixed %)}
+                                  :render-fn #(num/mixed % {:curr "£"})}
                                  {:key :!latest_turnover_delta
                                   :sortable true
                                   :label (fn [] [:div "Turnover change\u0020" [:small "(year on year)"]])
                                   :right-align true
                                   :render-fn (fn [v r]
-                                               (let [pv (-! (:!latest_turnover r) v)
-                                                     v (*! 100 (div! v pv))]
-                                                 (when v
-                                                   [:span
-                                                    (num/mixed v) "%"
-                                                    (sign-icon v)])))}
+                                               (when v
+                                                 [:span
+                                                  (num/mixed v {:curr "£"})
+                                                  (sign-icon v)]))}
                                  {:key :!latest_employee_count
                                   :sortable true
                                   :label (fn [] [:div "Latest employees\u0020" [:small "(UK-wide)"]])
@@ -540,12 +538,10 @@
                                   :label (fn [] [:div "Employees change\u0020" [:small "(year on year)"]])
                                   :right-align true
                                   :render-fn (fn [v r]
-                                               (let [pv (-! (:!latest_employee_count r) v)
-                                                     v (*! 100 (div! v pv))]
-                                                 (when v
-                                                   [:span
-                                                    (num/mixed v) "%"
-                                                    (sign-icon v)])))}
+                                               (when v
+                                                 [:span
+                                                  (num/mixed v)
+                                                  (sign-icon v)]))}
 
                                  ]}
             :table-data nil}
@@ -563,8 +559,7 @@
                                        :index-type "accounts"
                                        :time-variable "?accounts_date"
                                        :metrics {:variable :!turnover :title "Turnover (UK-wide, grouped by reported year) (£)"}
-                                       :interval "year"
-                                       :before "2013-01-01"}
+                                       :interval "year"}
                                :color "#28828a"
                                :timeline-data nil}
 
@@ -572,8 +567,7 @@
                                          :index-type "accounts"
                                          :time-variable "?accounts_date"
                                          :metrics {:variable :!employee_count :title "Employees (UK-wide, grouped by reported year)"}
-                                         :interval "year"
-                                         :before "2013-01-01"}
+                                         :interval "year"}
                                  :color "#28828a"
                                  :timeline-data nil}
 

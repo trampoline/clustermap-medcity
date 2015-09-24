@@ -350,7 +350,7 @@ var mixed = null;
 var mixed__1 = (function (n){return mixed.call(null,n,null);
 });
 var mixed__2 = (function (n,p__20483){var map__20485 = p__20483;var map__20485__$1 = ((cljs.core.seq_QMARK_.call(null,map__20485))?cljs.core.apply.call(null,cljs.core.hash_map,map__20485):map__20485);var opts = map__20485__$1;var sf = cljs.core.get.call(null,map__20485__$1,new cljs.core.Keyword(null,"sf","sf",-1949491738),(3));var threshold = cljs.core.get.call(null,map__20485__$1,new cljs.core.Keyword(null,"threshold","threshold",204221583),(1000000));var dec = cljs.core.get.call(null,map__20485__$1,new cljs.core.Keyword(null,"dec","dec",1888433436),(0));var curr = cljs.core.get.call(null,map__20485__$1,new cljs.core.Keyword(null,"curr","curr",-1092372808),"");var plus_QMARK_ = cljs.core.get.call(null,map__20485__$1,new cljs.core.Keyword(null,"plus?","plus?",-3051327),false);var default$ = cljs.core.get.call(null,map__20485__$1,new cljs.core.Keyword(null,"default","default",-1987822328),"");if(clustermap.formats.number.actually_really_number_QMARK_.call(null,n))
-{if((n < threshold))
+{if((Math.abs(n) < threshold))
 {return clustermap.formats.number.readable.call(null,n,opts);
 } else
 {return clustermap.formats.number.eng_readable.call(null,n,opts);
