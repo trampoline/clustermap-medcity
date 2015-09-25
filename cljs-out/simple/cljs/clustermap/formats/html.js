@@ -14,8 +14,8 @@ var classes = null;if (arguments.length > 0) {
   classes = cljs.core.array_seq(Array.prototype.slice.call(arguments, 0),0);} 
 return combine_classes__delegate.call(this,classes);};
 combine_classes.cljs$lang$maxFixedArity = 0;
-combine_classes.cljs$lang$applyTo = (function (arglist__29033){
-var classes = cljs.core.seq(arglist__29033);
+combine_classes.cljs$lang$applyTo = (function (arglist__29042){
+var classes = cljs.core.seq(arglist__29042);
 return combine_classes__delegate(classes);
 });
 combine_classes.cljs$core$IFn$_invoke$arity$variadic = combine_classes__delegate;
