@@ -167,26 +167,9 @@ mount.cljs$core$IFn$_invoke$arity$variadic = mount__delegate;
 return mount;
 })()
 ;
-/**
-* @param {...*} var_args
-*/
-clustermap.components.mount.unmount = (function() { 
-var unmount__delegate = function (p__29658){var map__29660 = p__29658;var map__29660__$1 = ((cljs.core.seq_QMARK_.call(null,map__29660))?cljs.core.apply.call(null,cljs.core.hash_map,map__29660):map__29660);var target = cljs.core.get.call(null,map__29660__$1,new cljs.core.Keyword(null,"target","target",253001721));var name = cljs.core.get.call(null,map__29660__$1,new cljs.core.Keyword(null,"name","name",1843675177));var target__$1 = (((typeof target === 'string') || ((target instanceof cljs.core.Keyword)))?document.getElementById(name.call(null,target)):target);if(cljs.core.truth_(target__$1))
+clustermap.components.mount.unmount = (function unmount(target){var target__$1 = (((typeof target === 'string') || ((target instanceof cljs.core.Keyword)))?document.getElementById(cljs.core.name.call(null,target)):target);if(cljs.core.truth_(target__$1))
 {return om.core.detach_root.call(null,target__$1);
 } else
-{return console.log(("component: <"+cljs.core.str.cljs$core$IFn$_invoke$arity$1(name)+"> can't unmount : can't find target: <"+cljs.core.str.cljs$core$IFn$_invoke$arity$1(target__$1)+">"));
+{return console.log(("component: <> can't unmount : can't find target: <"+cljs.core.str.cljs$core$IFn$_invoke$arity$1(target__$1)+">"));
 }
-};
-var unmount = function (var_args){
-var p__29658 = null;if (arguments.length > 0) {
-  p__29658 = cljs.core.array_seq(Array.prototype.slice.call(arguments, 0),0);} 
-return unmount__delegate.call(this,p__29658);};
-unmount.cljs$lang$maxFixedArity = 0;
-unmount.cljs$lang$applyTo = (function (arglist__29661){
-var p__29658 = cljs.core.seq(arglist__29661);
-return unmount__delegate(p__29658);
 });
-unmount.cljs$core$IFn$_invoke$arity$variadic = unmount__delegate;
-return unmount;
-})()
-;

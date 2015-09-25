@@ -18,7 +18,7 @@
   (:import [goog History]
            [goog.history EventType]))
 
-
+(enable-console-print!)
 (defonce ^:private history* (History.))
 
 (defprotocol IAppService
@@ -99,6 +99,7 @@
 
       (stop [this]
         (doseq [{:keys [target]} component-defs]
+          (js/console.log target)
           (mount/unmount target))
 
         (destroy app-service this)
@@ -123,7 +124,9 @@
       (get-navigator-fn [_]
         nav-fn)
 
-      (navigate [_ view] (nav-fn view)))))
+      (navigate [_ view]
+        (js/console.log "in navigate: " view)
+        (nav-fn view)))))
 
 (defn start-or-restart-app
   [app-instance-atom initial-state components app-service]
