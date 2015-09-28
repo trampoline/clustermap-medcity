@@ -339,7 +339,8 @@
          ;; :boundaryline-collections [[0 "nuts_2"] [8 "nuts_3"] [9 "nutsish_4"] [11 "nutsish_5"]]
          ;; :boundaryline-collections [[0 "uk_boroughs"] [10 "uk_wards"]]
          :boundaryline-collections [[0 "uk_regions"][9 "uk_boroughs"][11 "uk_wards"]]
-         :controls {:initial-bounds [[52.8 1.8] [50.9 -3.0]] #_[[50.56230444080573 -1.9775390625][53.02139221293762 1.8182373046875]]
+         :controls {:initial-bounds [[51.16126063523994, -1.226348876953125], [51.84511093992763, 1.001129150390625]]
+
                     :map-options {:zoomControl true
                                   :dragging true
                                   :touchZoom true
