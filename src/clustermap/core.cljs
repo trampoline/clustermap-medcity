@@ -212,6 +212,45 @@
                                            ;;         {:value "biotech_randd" :label "Biotechnology research and development"}
                                            ;;         ]}
 
+                                           {:id :bouroughs
+                                            :type :tag-checkboxes
+                                            :label "Boroughs"
+                                            :sorted false
+                                            :visible true
+                                            :controls true
+                                            :tag-type "uk_boroughs"
+                                            :tags [{:value "osbl_district_borough_unitary_region__camden_london_boro" :label "Camden"}
+                                                   {:value "osbl_district_borough_unitary_region__greenwich_london_boro" :label "Greenwich"}
+                                                   {:value "osbl_district_borough_unitary_region__hackney_london_boro" :label "Hackney"}
+                                                   {:value "osbl_district_borough_unitary_region__hammersmith_and_fulham_london_boro" :label "Hammersmith and Fulham"}
+                                                   {:value "osbl_district_borough_unitary_region__islington_london_boro" :label "Islington"}
+                                                   {:value "osbl_district_borough_unitary_region__kensington_and_chelsea_london_boro" :label "Royal Borough of Kensington and Chelsea"}
+                                                   {:value "osbl_district_borough_unitary_region__lambeth_london_boro" :label "Lambeth"}
+                                                   {:value "osbl_district_borough_unitary_region__lewisham_london_boro" :label "Lewisham"}
+                                                   {:value "osbl_district_borough_unitary_region__southwark_london_boro" :label "Southwark"}
+                                                   {:value "osbl_district_borough_unitary_region__tower_hamlets_london_boro" :label "Tower Hamlets"}
+                                                   {:value "osbl_district_borough_unitary_region__wandsworth_london_boro" :label "Wandsworth"}
+                                                   {:value "osbl_district_borough_unitary_region__city_of_westminster_london_boro" :label "Westminster"}
+                                                   {:value "osbl_district_borough_unitary_region__barking_and_dagenham_london_boro" :label "Barking and Dagenham"}
+                                                   {:value "osbl_district_borough_unitary_region__barnet_london_boro" :label "Barnet"}
+                                                   {:value "osbl_district_borough_unitary_region__bexley_london_boro" :label "Bexley"}
+                                                   {:value "osbl_district_borough_unitary_region__brent_london_boro" :label "Brent"}
+                                                   {:value "osbl_district_borough_unitary_region__bromley_london_boro" :label "Bromley"}
+                                                   {:value "osbl_district_borough_unitary_region__croydon_london_boro" :label "Croydon"}
+                                                   {:value "osbl_district_borough_unitary_region__ealing_london_boro" :label "Ealing"}
+                                                   {:value "osbl_district_borough_unitary_region__enfield_london_boro" :label "Enfield"}
+                                                   {:value "osbl_district_borough_unitary_region__haringey_london_boro" :label "Haringey"}
+                                                   {:value "osbl_district_borough_unitary_region__harrow_london_boro" :label "Harrow"}
+                                                   {:value "osbl_district_borough_unitary_region__havering_london_boro" :label "Havering"}
+                                                   {:value "osbl_district_borough_unitary_region__hillingdon_london_boro" :label "Hillingdon"}
+                                                   {:value "osbl_district_borough_unitary_region__hounslow_london_boro" :label "Hounslow"}
+                                                   {:value "osbl_district_borough_unitary_region__kingston_upon_thames_london_boro" :label "Kingston upon Thames"}
+                                                   {:value "osbl_district_borough_unitary_region__merton_london_boro" :label "newham"}
+                                                   {:value "osbl_district_borough_unitary_region__redbridge_london_boro" :label "Redbridge"}
+                                                   {:value "osbl_district_borough_unitary_region__richmond_upon_thames_london_boro" :label "Richmond upon Thames"}
+                                                   {:value "osbl_district_borough_unitary_region__sutton_london_boro" :label "Sutton"}
+                                                   ]}
+
                                            {:id :highgrowth
                                             :type :checkboxes
                                             :label "High growth"
