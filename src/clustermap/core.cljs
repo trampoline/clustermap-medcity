@@ -612,22 +612,22 @@
    :geo-sponsors {:controls {:max-count 1}
                   :data nil}
 
-   #_:sector-histogram #_{:query {:index-name "companies"
-                                  :index-type "company"
-                                  :nested-path "?tags"
-                                  :nested-attr "tag"
-                                  :nested-filter {:term {:type "l4_sector"}}
-                                  :stats-attr "!latest_turnover"}
-                          :metrics [{:metric :sum
-                                     :title "Total latest turnover (UK-wide) (£)"
-                                     :label-formatter (fn [] (this-as this (num/mixed (.-value this))))}]
-                          :bar-width 20
-                          :chart-height 200
-                          :bar-color "#28828a"
-
-                          :tag-type "l4_sector"
-                          :tag-data nil
-                          :tag-agg-data nil}
+   :sector-histogram {:query {:index-name "companies"
+                              :index-type "company"
+                              :nested-path "?tags"
+                              :nested-attr "tag"
+                              :nested-filter {:term {:type "l4_sector"}}
+                              :stats-attr "!latest_turnover"}
+                      :metrics [{:metric :sum :type "pie"
+                                 :title "Total latest turnover (UK-wide) (£)"
+                                 :label-formatter (fn [] (this-as this (num/mixed (.-value this))))}]
+                      :bar-width 20
+                      :chart-height 300
+                      :bar-color "#28828a"
+                      :chart-type "pie"
+                      :tag-type "l4_sector"
+                      :tag-data nil
+                      :tag-agg-data nil}
 
    :revenue-bands {:query {:index-name "companies"
                            :index-type "company"
@@ -814,26 +814,26 @@
    ;;  :paths {:tag-histogram [:city-barchart]
    ;;          :filter-spec [:dynamic-filter-spec :composed :all]}}
 
-   #_{:name :sector-histogram-var-select
-      :f (partial
-          select-chooser/select-chooser-component
-          "Variable"
-          [{:value "!latest_turnover" :label "Total latest turnover (UK-wide) (£)"}
-           {:value "!latest_employee_count" :label "Total latest employees (UK-wide)"}
-           {:value "?counter" :label "Number of companies"}]
-          (fn
-            ([cursor] (get-in cursor [:query :stats-attr]))
-            ([cursor record]
-             (om/update! cursor [:query :stats-attr] (:value record))
-             (om/update! cursor [:metrics 0 :title] (:label record)))))
-      :target "sector-histogram-var-select-component"
-      :path [:sector-histogram]}
+   {:name :sector-histogram-var-select
+    :f (partial
+        select-chooser/select-chooser-component
+        "Variable"
+        [{:value "!latest_turnover" :label "Total latest turnover (UK-wide) (£)"}
+         {:value "!latest_employee_count" :label "Total latest employees (UK-wide)"}
+         {:value "?counter" :label "Number of companies"}]
+        (fn
+          ([cursor] (get-in cursor [:query :stats-attr]))
+          ([cursor record]
+           (om/update! cursor [:query :stats-attr] (:value record))
+           (om/update! cursor [:metrics 0 :title] (:label record)))))
+    :target "sector-histogram-var-select-component"
+    :path [:sector-histogram]}
 
-   #_{:name :sector-histogram
-      :f tag-histogram/tag-histogram
-      :target "sector-histogram-component"
-      :paths {:tag-histogram [:sector-histogram]
-              :filter-spec [:dynamic-filter-spec :composed :all]}}
+   {:name :sector-histogram
+    :f tag-histogram/tag-histogram
+    :target "sector-histogram-component"
+    :paths {:tag-histogram [:sector-histogram]
+            :filter-spec [:dynamic-filter-spec :composed :all]}}
 
    {:name :table
     :f table/table-component
