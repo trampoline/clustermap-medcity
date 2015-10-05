@@ -199,24 +199,12 @@
                                            ;;         {:value "osbl_european_region_region__london_euro_region" :label "London"}
                                            ;;         {:value "osbl_european_region_region__south_east_euro_region" :label "South East"}]}
 
-                                           ;; {:id :sector
-                                           ;;  :type :tag-checkboxes
-                                           ;;  :label "Sector"
-                                           ;;  :sorted false
-                                           ;;  :visible true
-                                           ;;  :controls true
-                                           ;;  :tag-type "l4_sector"
-                                           ;;  :tags [
-                                           ;;         {:value "pharm_manf" :label "Pharmaceutical manufacture"}
-                                           ;;         {:value "med_opt_equip_manf" :label "Medical (exc. pharmaceutical) & optical equipment manufacture"}
-                                           ;;         {:value "biotech_randd" :label "Biotechnology research and development"}
-                                           ;;         ]}
 
                                            {:id :bouroughs
                                             :type :tag-checkboxes
                                             :label "Boroughs"
-                                            :sorted false
-                                            :visible true
+                                            :sorted true
+                                            :visible false
                                             :controls true
                                             :tag-type "uk_boroughs"
                                             :tags [{:value "osbl_district_borough_unitary_region__camden_london_boro" :label "Camden"}
@@ -251,6 +239,19 @@
                                                    {:value "osbl_district_borough_unitary_region__sutton_london_boro" :label "Sutton"}
                                                    ]}
 
+                                           {:id :sector
+                                            :type :tag-checkboxes
+                                            :label "Sector"
+                                            :sorted false
+                                            :visible true
+                                            :controls true
+                                            :tag-type "ons_sector"
+                                            :tags [{:value "digi_tech" :label "Digital Technologies"}
+                                                   {:value "lifesci_health" :label "Life Sciences & Healthcare"}
+                                                   {:value "pub_broad" :label "Publishing & Broadcasting"}
+                                                   {:value "other_scitechmanf" :label "Other scientific/technological manufacture"}
+                                                   {:value "other_scitech_serv" :label "Other scientific/technological services"}]}
+
                                            {:id :highgrowth
                                             :type :checkboxes
                                             :label "High growth"
@@ -258,67 +259,6 @@
                                             :options [{:value "latest" :label "High growth companies" :filter scaleup-filter}
                                                       ]}
 
-                                           {:id :segments
-                                            :type :tag-checkboxes
-                                            :label "Segments"
-                                            :sorted false
-                                            :visible false
-                                            :controls true
-                                            :tag-type "bis_l1p1_sector"
-                                            :tags [{:value "IBA" :label "Bio fuels"}
-                                                   {:value "IBB" :label "Environmental"}
-                                                   {:value "IBC" :label "Food/Drink"}
-                                                   {:value "IBD" :label "Commodity Chemicals"}
-                                                   {:value "IBE" :label "Fine & Speciality Chemicals"}
-                                                   {:value "IBF" :label "Pharmaceutical Intermediaries"}
-                                                   {:value "IBG" :label "Personal Care/ Cosmetics"}
-                                                   {:value "IBH" :label "Specialist Services"}
-                                                   {:value "IBI" :label "Agro-Industry"}
-                                                   {:value "IBX" :label "Specialist Services"}
-                                                   {:value "MBA" :label "Antibodies"}
-                                                   {:value "MBB" :label "Therapeutic Proteins"}
-                                                   {:value "MBC" :label "Advanced Therapy Medicinal Products (ATMPs)"}
-                                                   {:value "MBD" :label "Vaccines"}
-                                                   {:value "MBE" :label "Small Molecules"}
-                                                   {:value "MBF" :label "Blood & Tissue Products"}
-                                                   {:value "MBG" :label "Specialist Services"}
-                                                   {:value "MBX" :label "Specialist Suppliers/Supply Chain"}
-                                                   {:value "MBZ" :label "Medical Biotechnology - Unclassified "}
-                                                   {:value "MTA" :label "Wound Care and Management "}
-                                                   {:value "MTB" :label "In vitro diagnostic technology"}
-                                                   {:value "MTC" :label "Radiotherapy equipment"}
-                                                   {:value "MTD" :label "Medical Imaging/Ultrasound Equipment and Materials"}
-                                                   {:value "MTE" :label "Anaesthetic and respiratory technology"}
-                                                   {:value "MTF" :label "Orthopaedic Devices"}
-                                                   {:value "MTG" :label "Cardiovascular and vascular devices"}
-                                                   {:value "MTH" :label "Neurology"}
-                                                   {:value "MTI" :label "Ophthalmic Devices/Equipment"}
-                                                   {:value "MTJ" :label "Dental and maxillofacial technology"}
-                                                   {:value "MTK" :label "Drug Delivery"}
-                                                   {:value "MTL" :label "Infection Control "}
-                                                   {:value "MTM" :label "Surgical Instruments (reusable) n.e.c."}
-                                                   {:value "MTN" :label "Single use technology n.e.c."}
-                                                   {:value "MTO" :label "Re-usable diagnostic or analytic equipment n.e.c."}
-                                                   {:value "MTP" :label "Implantable devices n.e.c."}
-                                                   {:value "MTQ" :label "Assistive Technology"}
-                                                   {:value "MTR" :label "Mobility Access"}
-                                                   {:value "MTS" :label "Hospital hardware including ambulatory"}
-                                                   {:value "MTT" :label "ICT+ E-health"}
-                                                   {:value "MTU" :label "Professional services, Consultancy"}
-                                                   {:value "MTV" :label "Education and Training"}
-                                                   {:value "MTX" :label "Specialist Suppliers/Supply Chain"}
-                                                   {:value "MTZ" :label "Medical Technology - Unclassified "}
-                                                   {:value "PHA" :label "Antibodies"}
-                                                   {:value "PHB" :label "Therapeutic Proteins"}
-                                                   {:value "PHC" :label "Advanced Therapy Medicinal Products (ATMPs)"}
-                                                   {:value "PHD" :label "Vaccines"}
-                                                   {:value "PHE" :label "Small Molecules"}
-                                                   {:value "PHF" :label "Blood & Tissue Products"}
-                                                   {:value "PHG" :label "Specialist Services"}
-                                                   {:value "PHX" :label "Specialist Services"}
-                                                   {:value "PHZ" :label "Pharmaceutical - Unclassified"}
-                                                   {:value "no_data" :label "No data"}
-                                                   ]}
                                            ]
 
                          ;; base-filters AND combined with dynamic components
