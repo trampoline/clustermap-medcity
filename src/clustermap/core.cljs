@@ -569,6 +569,23 @@
                       :tag-data nil
                       :tag-agg-data nil}
 
+   :borough-histogram {:query {:index-name "companies"
+                               :index-type "company"
+                               :nested-path "?tags"
+                               :nested-attr "tag"
+                               :nested-filter {:term {:type "uk_boroughs"}}
+                               :stats-attr "!latest_turnover"}
+                       :metrics [{:metric :sum :type "pie"
+                                  :title "Total latest turnover (UK-wide) (£)"
+                                  :label-formatter (fn [] (this-as this (num/mixed (.-value this))))}]
+                       :bar-width 20
+                       :chart-height 400
+                       :bar-color "#28828a"
+                       :chart-type "bar"
+                       :tag-type "uk_boroughs"
+                       :tag-data nil
+                       :tag-agg-data nil}
+
    :revenue-bands {:query {:index-name "companies"
                            :index-type "company"
 
@@ -773,6 +790,27 @@
     :f tag-histogram/tag-histogram
     :target "sector-histogram-component"
     :paths {:tag-histogram [:sector-histogram]
+            :filter-spec [:dynamic-filter-spec :composed :all]}}
+
+   {:name :borough-histogram-var-select
+    :f (partial
+        select-chooser/select-chooser-component
+        "Variable"
+        [{:value "!latest_turnover" :label "Total latest turnover (UK-wide) (£)"}
+         {:value "!latest_employee_count" :label "Total latest employees (UK-wide)"}
+         {:value "?counter" :label "Number of companies"}]
+        (fn
+          ([cursor] (get-in cursor [:query :stats-attr]))
+          ([cursor record]
+           (om/update! cursor [:query :stats-attr] (:value record))
+           (om/update! cursor [:metrics 0 :title] (:label record)))))
+    :target "borough-histogram-var-select-component"
+    :path [:borough-histogram]}
+
+   {:name :borough-histogram
+    :f tag-histogram/tag-histogram
+    :target "borough-histogram-component"
+    :paths {:tag-histogram [:borough-histogram]
             :filter-spec [:dynamic-filter-spec :composed :all]}}
 
    {:name :table

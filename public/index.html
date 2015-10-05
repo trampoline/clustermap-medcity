@@ -174,9 +174,9 @@
                                   <div class="panel-settings">
                                     <p id="reset-map-view-button-component"></p>
                                     <div>
-                                      <label class="checkbox-inline"> <span id="display-minichart-turnover-component" class="minichart-key metric-1"></span>Turnover</label>
-                                      <label class="checkbox-inline"> <span id="display-minichart-employee-count-component" class="minichart-key metric-2"></span>Employees</label>
-                                      <label class="checkbox-inline"> <span id="display-principal-name-component"></span>Principal company name</label>
+                                      <label class="checkbox-inline"><span id="display-minichart-turnover-component" class="minichart-key metric-1"></span>Turnover</label>
+                                      <label class="checkbox-inline"><span id="display-minichart-employee-count-component" class="minichart-key metric-2"></span>Employees</label>
+                                      <label class="checkbox-inline"><span id="display-principal-name-component"></span>Principal company name</label>
                                     </div>
                                     <div><span>Select to show details under each company location marker</span>
                                     </div>
@@ -193,6 +193,24 @@
                                 <h3>Charts</h3>
                                 <!-- p Intro text...-->
                               </header>
+                              <div class="panel">
+                                <div class="panel-heading">
+                                  <h4>Boroughs</h4>
+                                  <div><span id="borough-histogram-var-select-component" class="custom-select"></span></div>
+                                </div>
+                                <div class="panel-body">
+                                  <div id="borough-histogram-component"></div>
+                                </div>
+                              </div>
+                              <div class="panel">
+                                <div class="panel-heading">
+                                  <h4>Sectors</h4>
+                                  <div><span id="sector-histogram-var-select-component" class="custom-select"></span></div>
+                                </div>
+                                <div class="panel-body">
+                                  <div id="sector-histogram-component"></div>
+                                </div>
+                              </div>
                               <div class="panel">
                                 <div class="panel-heading">
                                   <h4>Trends<small>(grouped by reported year)</small></h4>
@@ -230,7 +248,7 @@
                                 <h3>Companies</h3>
                                 <!-- p Intro text...-->
                               </header>
-                              <div id="table-component"> 
+                              <div id="table-component">
                                 
                               </div>
                             </section>
@@ -314,7 +332,7 @@
                                         <div class="chart-heading">
                                           <h4 class="stat-title">Turnover (2013)</h4>
                                           <div class="stat-amount">43.3M<small>GBP</small></div>
-                                          <div class="stat-change"> <i class="icon-positive"></i><span>15.6%</span></div>
+                                          <div class="stat-change"><i class="icon-positive"></i><span>15.6%</span></div>
                                         </div>
                                         <div class="chart-container-lg"></div>
                                       </div>
@@ -417,7 +435,7 @@
             if ($win.scrollTop() > height) {
       
               $('body').addClass('page-condensed');
-              
+      
             }
           }
         });
