@@ -245,7 +245,7 @@
                                             :sorted false
                                             :visible true
                                             :controls true
-                                            :tag-type "ons_sector"
+                                            :tag-type "nontoxic_sector"
                                             :tags [{:value "digi_tech" :label "Digital Technologies"}
                                                    {:value "lifesci_health" :label "Life Sciences & Healthcare"}
                                                    {:value "pub_broad" :label "Publishing & Broadcasting"}
@@ -556,7 +556,7 @@
                               :index-type "company"
                               :nested-path "?tags"
                               :nested-attr "tag"
-                              :nested-filter {:term {:type "l4_sector"}}
+                              :nested-filter {:term {:type "nontoxic_sector"}}
                               :stats-attr "!latest_turnover"}
                       :metrics [{:metric :sum :type "pie"
                                  :title "Total latest turnover (UK-wide) (£)"
@@ -565,7 +565,7 @@
                       :chart-height 300
                       :bar-color "#28828a"
                       :chart-type "pie"
-                      :tag-type "l4_sector"
+                      :tag-type "nontoxic_sector"
                       :tag-data nil
                       :tag-agg-data nil}
 
