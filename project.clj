@@ -79,4 +79,9 @@
                                    :output-dir "cljs-out/advanced/cljs"
                                    :optimizations :advanced
                                    :output-wrapper false
-                                   :externs ["react/externs/react.js"]}}}})
+                                   :externs ["resources/externs/jquery-1.9.js"
+                                             "resources/externs/jquery.tooltip.externs.js"
+                                             "resources/externs/leaflet.ext.js"
+                                             "resources/externs/rtree.ext.js"
+                                             "resources/externs/highcharts.ext.js"
+                                             "resources/externs/ui-bootstrap.js"]}}}})
