@@ -9,7 +9,7 @@
                  [jayq "2.5.2"]
                  [org.omcljs/om "0.9.0"]
                  [prismatic/om-tools "0.3.10" :exclusions [org.clojure/clojure]]
-                 [sablono "0.3.1"]
+                 [sablono "0.3.4"]
                  [hiccups "0.3.0"]
                  [secretary "1.2.3"]
                  [com.andrewmcveigh/cljs-time "0.3.13"]
