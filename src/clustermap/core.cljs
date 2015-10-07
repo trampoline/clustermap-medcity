@@ -575,11 +575,11 @@
                                :nested-attr "tag"
                                :nested-filter {:term {:type "uk_boroughs"}}
                                :stats-attr "!latest_turnover"}
-                       :metrics [{:metric :sum :type "pie"
+                       :metrics [{:metric :sum
                                   :title "Total latest turnover (UK-wide) (£)"
                                   :label-formatter (fn [] (this-as this (num/mixed (.-value this))))}]
-                       :bar-width 20
-                       :chart-height 400
+                       :bar-width 10
+                       :chart-height 750
                        :bar-color "#28828a"
                        :chart-type "bar"
                        :tag-type "uk_boroughs"
