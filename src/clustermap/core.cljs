@@ -200,6 +200,28 @@
                                            ;;         {:value "osbl_european_region_region__south_east_euro_region" :label "South East"}]}
 
 
+
+
+                                           {:id :sector
+                                            :type :tag-checkboxes
+                                            :label "Sector"
+                                            :sorted false
+                                            :visible true
+                                            :controls true
+                                            :tag-type "nontoxic_sector"
+                                            :tags [{:value "digi_tech" :label "Digital Technologies"}
+                                                   {:value "lifesci_health" :label "Life Sciences & Healthcare"}
+                                                   {:value "pub_broad" :label "Publishing & Broadcasting"}
+                                                   {:value "other_scitechmanf" :label "Other scientific/technological manufacture"}
+                                                   {:value "other_scitech_serv" :label "Other scientific/technological services"}]}
+
+                                           {:id :highgrowth
+                                            :type :checkboxes
+                                            :label "Scaleups"
+                                            :visible true
+                                            :options [{:value "latest" :label "High growth companies" :filter scaleup-filter}
+                                                      ]}
+
                                            {:id :bouroughs
                                             :type :tag-checkboxes
                                             :label "Boroughs"
@@ -238,26 +260,6 @@
                                                    {:value "osbl_district_borough_unitary_region__richmond_upon_thames_london_boro" :label "Richmond upon Thames"}
                                                    {:value "osbl_district_borough_unitary_region__sutton_london_boro" :label "Sutton"}
                                                    ]}
-
-                                           {:id :sector
-                                            :type :tag-checkboxes
-                                            :label "Sector"
-                                            :sorted false
-                                            :visible true
-                                            :controls true
-                                            :tag-type "nontoxic_sector"
-                                            :tags [{:value "digi_tech" :label "Digital Technologies"}
-                                                   {:value "lifesci_health" :label "Life Sciences & Healthcare"}
-                                                   {:value "pub_broad" :label "Publishing & Broadcasting"}
-                                                   {:value "other_scitechmanf" :label "Other scientific/technological manufacture"}
-                                                   {:value "other_scitech_serv" :label "Other scientific/technological services"}]}
-
-                                           {:id :highgrowth
-                                            :type :checkboxes
-                                            :label "High growth"
-                                            :visible true
-                                            :options [{:value "latest" :label "High growth companies" :filter scaleup-filter}
-                                                      ]}
 
                                            ]
 
