@@ -456,7 +456,7 @@
                                                             :render-fn (fn [v] (num/mixed v))}
                                                            {:key :!latest_turnover
                                                             :metric :sum
-                                                            :label (fn [] [:p "Total latest turnover\u00A0" [:small "(UK-wide)"]])
+                                                            :label (fn [] [:p "Latest Turnover\u00A0" [:small "(£)"]])
                                                             :render-fn (fn [v] (num/mixed v {:curr "£"}))}
                                                            {:key :!latest_turnover_delta
                                                             :belongs-to :!latest_turnover
@@ -469,7 +469,7 @@
                                                                                 "% year on year"])}
                                                            {:key :!latest_employee_count
                                                             :metric :sum
-                                                            :label (fn [] [:p "Total latest employees\u00A0" [:small "(UK-wide)"]])
+                                                            :label (fn [] [:p "Latest employees\u00A0" [:small ""]])
                                                             :render-fn (fn [v] (num/mixed v))}
                                                            {:key :!latest_employee_count_delta
                                                             :belongs-to :!latest_employee_count
@@ -529,7 +529,7 @@
    :trends-timeline {:query {:index-name "company-accounts"
                              :index-type "accounts"
                              :time-variable "?accounts_date"
-                             :metrics {:variable :!turnover :title "Turnover (UK-wide) (£)" :metric :sum}
+                             :metrics {:variable :!turnover :title "Turnover by reported year (£)" :metric :sum}
                              :interval "year"
                              :before "2013-01-01"}
                      :color "#28828a"
@@ -546,7 +546,7 @@
    :company-employment-timeline {:query {:index-name "company-accounts"
                                          :index-type "accounts"
                                          :time-variable "?accounts_date"
-                                         :metrics {:variable :!employee_count :title "Employees (UK-wide, grouped by reported year)"}
+                                         :metrics {:variable :!employee_count :title "Employees by reported year"}
                                          :interval "year"}
                                  :color "#28828a"
                                  :timeline-data nil}
@@ -561,7 +561,7 @@
                               :nested-filter {:term {:type "nontoxic_sector"}}
                               :stats-attr "!latest_turnover"}
                       :metrics [{:metric :sum :type "pie"
-                                 :title "Total latest turnover (UK-wide) (£)"
+                                 :title "Latest turnover (£)"
                                  :label-formatter (fn [] (this-as this (num/mixed (.-value this))))}]
                       :bar-width 20
                       :chart-height 300
@@ -578,7 +578,7 @@
                                :nested-filter {:term {:type "uk_boroughs"}}
                                :stats-attr "!latest_turnover"}
                        :metrics [{:metric :sum
-                                  :title "Total latest turnover (UK-wide) (£)"
+                                  :title "Latest turnover (£)"
                                   :label-formatter (fn [] (this-as this (num/mixed (.-value this))))}]
                        :bar-width 10
                        :chart-height 750
@@ -617,7 +617,7 @@
                                           :aggs
                                           {:metric {:value_count {:field "?natural_id"}}}}}
                            }
-                   :view {:rows [{:key "latest" :label "latest reported"}]
+                   :view {:rows [{:key "latest" :label "Companies in size band"}]
                           :cols [{:key "lt50k"  :label "Less than £50k"}
                                  {:key "50k"  :label "£50k - £100k"}
                                  {:key "100k" :label "£100k - £250k"}
@@ -660,7 +660,7 @@
                                              :aggs
                                              {:metric {:value_count {:field "?natural_id"}}}}}
                               }
-                      :view {:rows [{:key "latest" :label "latest reported"}]
+                      :view {:rows [{:key "latest" :label "Companies in size band"}]
                              :cols [{:key "l"    :label "1-4"}
                                     {:key "5"    :label "5-9"}
                                     {:key "10"   :label "10-19"}
@@ -777,8 +777,8 @@
     :f (partial
         select-chooser/select-chooser-component
         "Variable"
-        [{:value "!latest_turnover" :label "Total latest turnover (UK-wide) (£)"}
-         {:value "!latest_employee_count" :label "Total latest employees (UK-wide)"}
+        [{:value "!latest_turnover" :label "Latest turnover (£)"}
+         {:value "!latest_employee_count" :label "Latest employees"}
          {:value "?counter" :label "Number of companies"}]
         (fn
           ([cursor] (get-in cursor [:query :stats-attr]))
@@ -798,8 +798,8 @@
     :f (partial
         select-chooser/select-chooser-component
         "Variable"
-        [{:value "!latest_turnover" :label "Total latest turnover (UK-wide) (£)"}
-         {:value "!latest_employee_count" :label "Total latest employees (UK-wide)"}
+        [{:value "!latest_turnover" :label "Latest turnover (£)"}
+         {:value "!latest_employee_count" :label "Latest employees"}
          {:value "?counter" :label "Number of companies"}]
         (fn
           ([cursor] (get-in cursor [:query :stats-attr]))
@@ -831,8 +831,8 @@
     :f (partial
         select-chooser/select-chooser-component
         "Variable"
-        [{:value :!turnover :label "Turnover (UK-wide) (£)"}
-         {:value :!employee_count :label "Employees (UK-wide)"}]
+        [{:value :!turnover :label "Turnover by reported year (£)"}
+         {:value :!employee_count :label "Employees by reported year"}]
         (fn
           ([cursor] (get-in cursor [:query :metrics :variable]))
           ([cursor record]
