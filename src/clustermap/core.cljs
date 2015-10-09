@@ -234,7 +234,7 @@
                                                    {:value "osbl_district_borough_unitary_region__hackney_london_boro" :label "Hackney"}
                                                    {:value "osbl_district_borough_unitary_region__hammersmith_and_fulham_london_boro" :label "Hammersmith and Fulham"}
                                                    {:value "osbl_district_borough_unitary_region__islington_london_boro" :label "Islington"}
-                                                   {:value "osbl_district_borough_unitary_region__kensington_and_chelsea_london_boro" :label "Royal Borough of Kensington and Chelsea"}
+                                                   {:value "osbl_district_borough_unitary_region__kensington_and_chelsea_london_boro" :label "Kensington and Chelsea"}
                                                    {:value "osbl_district_borough_unitary_region__lambeth_london_boro" :label "Lambeth"}
                                                    {:value "osbl_district_borough_unitary_region__lewisham_london_boro" :label "Lewisham"}
                                                    {:value "osbl_district_borough_unitary_region__southwark_london_boro" :label "Southwark"}
@@ -255,7 +255,7 @@
                                                    {:value "osbl_district_borough_unitary_region__hillingdon_london_boro" :label "Hillingdon"}
                                                    {:value "osbl_district_borough_unitary_region__hounslow_london_boro" :label "Hounslow"}
                                                    {:value "osbl_district_borough_unitary_region__kingston_upon_thames_london_boro" :label "Kingston upon Thames"}
-                                                   {:value "osbl_district_borough_unitary_region__merton_london_boro" :label "newham"}
+                                                   {:value "osbl_district_borough_unitary_region__merton_london_boro" :label "Newham"}
                                                    {:value "osbl_district_borough_unitary_region__redbridge_london_boro" :label "Redbridge"}
                                                    {:value "osbl_district_borough_unitary_region__richmond_upon_thames_london_boro" :label "Richmond upon Thames"}
                                                    {:value "osbl_district_borough_unitary_region__sutton_london_boro" :label "Sutton"}
