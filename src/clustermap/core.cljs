@@ -583,7 +583,8 @@
                        :bar-width 10
                        :chart-height 750
                        :bar-color "#28828a"
-                       :xlabel-formatter (fn [] (this-as this (str/replace (.-value this) " London Boro" "")))
+                       :xlabel-formatter (fn [] (this-as this (some-> (.-value this)
+                                                                      (str/replace  " London Boro" ""))))
                        :chart-type "bar"
                        :tag-type "uk_boroughs"
                        :tag-data nil
