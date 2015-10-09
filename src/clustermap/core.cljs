@@ -4,6 +4,7 @@
   (:require
    [clojure.string :as str]
    [om.core :as om :include-macros true]
+   [jayq.core :refer [$]]
    [clustermap.api :as api]
    [clustermap.app :as app]
    [clustermap.filters :as filters]
@@ -272,6 +273,9 @@
                            :components {:natural_id nil}
                            :base-filters {:all nil}
                            :composed {}}
+
+   :about-modal {:content (constantly "About")
+                 :action (fn [& _] (-> ($ "#page-about") .modal))}
 
    :company-search {:controls {:search-fn api/company-search
                                :render-fn (fn [r] [[:div (:name r)]])
@@ -738,6 +742,11 @@
     :f color-scale/color-scale-component
     :target "color-scale-component"
     :path [:map :controls]}
+
+   {:name :about-modal
+    :f action-link/action-link-component
+    :target "about"
+    :paths {:action-link [:about-modal]}}
 
    {:name :company-close
     :f nav-button/nav-button-component
