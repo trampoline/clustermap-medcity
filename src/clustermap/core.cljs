@@ -129,17 +129,21 @@
 
 (defn money-point-formatter []
   "Format highcharts tooltip as normal but with the y-value formatted
-  for money. Also remove boro"
+  for money. Also remove boro. Add percentage if present"
   (this-as this
-           (str "<span style=\"font-size: 10px\">"
-                (some-> this .-key remove-boro)
-                "</span>"
-                "<br /><span style=\"color:#28828a"
-                "\">"
-                (-> this .-series .-name)
-                "</span>: <b>"
-                (num/mixed (.-y this))
-                "</b><br/>")))
+    (let [key (some-> this .-key remove-boro)
+          pc (some-> this .-percentage (num/mixed {:dec 1}))
+          series-name (-> this .-series .-name)
+          value (num/mixed (.-y this))]
+      (str "<span style=\"font-size: 10px\">"
+           key
+           "</span>"
+           "<br /><span style=\"color:#28828a\">"
+           series-name
+           "</span>: <b>"
+           value
+           (when pc (str " (" pc "%)"))
+           "</b><br/>"))))
 
 (defn sign-icon
   [n]
@@ -394,9 +398,9 @@
                                                    [:div.metric.metric-2
                                                     [:span.name "Emp"] [:span.value (num/compact (:latest_employee_count i))]]]])
                                :item-click-fn (fn [r e]
-                                                     (make-company-selection (:natural_id r))
-                                                     (app/navigate @app-instance "company")
-                                                     (.log js/console (clj->js ["CLICK" r e])))}
+                                                (make-company-selection (:natural_id r))
+                                                (app/navigate @app-instance "company")
+                                                (.log js/console (clj->js ["CLICK" r e])))}
 
                     :zoom nil
                     :bounds nil
