@@ -132,7 +132,7 @@
   for money. Also remove boro"
   (this-as this
            (str "<span style=\"font-size: 10px\">"
-                (some-> this .-x remove-boro)
+                (some-> this .-key remove-boro)
                 "</span>"
                 "<br /><span style=\"color:#28828a"
                 "\">"
