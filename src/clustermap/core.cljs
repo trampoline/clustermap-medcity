@@ -244,7 +244,7 @@
                                             :type :tag-checkboxes
                                             :label "Boroughs"
                                             :sorted true
-                                            :visible false
+                                            :visible true
                                             :controls true
                                             :tag-type "uk_boroughs"
                                             :tags [{:value "osbl_district_borough_unitary_region__camden_london_boro" :label "Camden"}
@@ -477,7 +477,7 @@
                                                             :render-fn (fn [v] (num/mixed v))}
                                                            {:key :!latest_turnover
                                                             :metric :sum
-                                                            :label (fn [] [:p "Latest Turnover\u00A0" [:small "(£)"]])
+                                                            :label (fn [] [:p "Latest turnover\u00A0"])
                                                             :render-fn (fn [v] (num/mixed v {:curr "£"}))}
                                                            {:key :!latest_turnover_delta
                                                             :belongs-to :!latest_turnover
@@ -607,7 +607,7 @@
                        :bar-width 10
                        :chart-height 750
                        :bar-color "#28828a"
-                       :xlabel-formatter (fn [] (this-as this (some-> (.-value this) remove-boro)))
+                       :xlabel-formatter (fn [] (this-as this (some-> this .-value remove-boro)))
                        :point-formatter money-point-formatter
                        :chart-type "bar"
                        :tag-type "uk_boroughs"
