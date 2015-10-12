@@ -124,6 +124,23 @@
                   (app/navigate @app-instance "company"))}
    name])
 
+(defn remove-boro [text]
+  (-> text str (str/replace  " London Boro" "")))
+
+(defn money-point-formatter []
+  "Format highcharts tooltip as normal but with the y-value formatted
+  for money. Also remove boro"
+  (this-as this
+           (str "<span style=\"font-size: 10px\">"
+                (some-> this .-x remove-boro)
+                "</span>"
+                "<br /><span style=\"color:#28828a"
+                "\">"
+                (-> this .-series .-name)
+                "</span>: <b>"
+                (num/mixed (.-y this))
+                "</b><br/>")))
+
 (defn sign-icon
   [n]
   (cond
@@ -536,6 +553,7 @@
                              :metrics {:variable :!turnover :title "Turnover by reported year (£)" :metric :sum}
                              :interval "year"
                              :before "2013-01-01"}
+                     :point-formatter money-point-formatter
                      :color "#28828a"
                      :timeline-data nil}
 
@@ -569,6 +587,7 @@
                                  :label-formatter (fn [] (this-as this (num/mixed (.-value this))))}]
                       :bar-width 20
                       :chart-height 300
+                      :point-formatter money-point-formatter
                       :bar-color "#28828a"
                       :chart-type "pie"
                       :tag-type "nontoxic_sector"
@@ -583,12 +602,13 @@
                                :stats-attr "!latest_turnover"}
                        :metrics [{:metric :sum
                                   :title "Latest turnover (£)"
+
                                   :label-formatter (fn [] (this-as this (num/mixed (.-value this))))}]
                        :bar-width 10
                        :chart-height 750
                        :bar-color "#28828a"
-                       :xlabel-formatter (fn [] (this-as this (some-> (.-value this)
-                                                                      (str/replace  " London Boro" ""))))
+                       :xlabel-formatter (fn [] (this-as this (some-> (.-value this) remove-boro)))
+                       :point-formatter money-point-formatter
                        :chart-type "bar"
                        :tag-type "uk_boroughs"
                        :tag-data nil
