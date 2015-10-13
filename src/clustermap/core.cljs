@@ -226,7 +226,7 @@
 
                                            {:id :sector
                                             :type :tag-checkboxes
-                                            :label "Sector"
+                                            :label "Broad Sectors"
                                             :sorted false
                                             :visible true
                                             :controls true
@@ -236,6 +236,36 @@
                                                    {:value "pub_broad" :label "Publishing & Broadcasting"}
                                                    {:value "other_scitechmanf" :label "Other scientific/technological manufacture"}
                                                    {:value "other_scitech_serv" :label "Other scientific/technological services"}]}
+
+                                           {:id :narrow-sector
+                                            :type :tag-checkboxes
+                                            :label "Narrow Sectors"
+                                            :sorted false
+                                            :visible false
+                                            :controls true
+                                            :tag-type "l4_sector"
+                                            :tags [{:value "comp_elec_manf" :label "Computer & Electronic manufacture"}
+                                                   {:value "dig_comp_serv" :label "Digital & Computer services"}
+                                                   {:value "med_opt_equip_manf" :label "Medical & optical equipment manufacture"}
+                                                   {:value "pharm_manf" :label "Pharmaceutical manufacture"}
+                                                   {:value "biotech_randd" :label "Biotechnology research and development"}
+                                                   {:value "healthcare_serv" :label "Healthcare services including veterinary"}
+                                                   {:value "comm_equip_manf" :label "Communication Equipment manufacture"}
+                                                   {:value "pub_mktg_graph_des" :label "Publishing, Marketing & Graphic Design"}
+                                                   {:value "aud_vis_broad" :label "Audio-visual broadcasting"}
+                                                   {:value "telecomm_serv" :label "Telecommunication services"}
+                                                   {:value "manf_rep_air_space" :label "Manufacture and repair of air and spacecraft"}
+                                                   {:value "def_tech" :label "Defence technologies"}
+                                                   {:value "auto_manf" :label "Automotive manufacture"}
+                                                   {:value "chem_manf" :label "Chemical Product manufacturing"}
+                                                   {:value "elec_mach_manf" :label "Electrical Machinery manufacture"}
+                                                   {:value "non_elec_mach_manf" :label "Non-electrical machinery manufacture"}
+                                                   {:value "precision_eng" :label "Precision engineering"}
+                                                   {:value "aero_transp" :label "Aerospace transport"}
+                                                   {:value "arch_eng_surv" :label "Architecture, engineering & quantity surveying"}
+                                                   {:value "higher_ed" :label "Higher education"}
+                                                   {:value "humanitities_randd" :label "Scientific research & development"}
+                                                   ]}
 
                                            {:id :highgrowth
                                             :type :checkboxes
