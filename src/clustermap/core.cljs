@@ -159,9 +159,9 @@
                                  "uk_boroughs" {:index nil
                                                 :rtree nil
                                                 :boundarylines {}}
-                                 "uk_wards" {:index nil
-                                             :rtree nil
-                                             :boundarylines {}}
+                                 ;; "uk_wards" {:index nil
+                                 ;;             :rtree nil
+                                 ;;             :boundarylines {}}
                                  "uk_regions" {:index nil
                                                :rtree nil
                                                :boundarylines {}}}
@@ -372,7 +372,8 @@
          ;; :boundaryline-collections [[0 "nuts_2"] [8 "nuts_3"] [9 "uk_boroughs"] [11 "uk_wards"]]
          ;; :boundaryline-collections [[0 "nuts_2"] [8 "nuts_3"] [9 "nutsish_4"] [11 "nutsish_5"]]
          ;; :boundaryline-collections [[0 "uk_boroughs"] [10 "uk_wards"]]
-         :boundaryline-collections [[0 "uk_regions"][9 "uk_boroughs"][11 "uk_wards"]]
+         ;; :boundaryline-collections [[0 "uk_regions"] [9 "uk_boroughs"] [11 "uk_wards"]]
+         :boundaryline-collections [[0 "uk_regions"] [9 "uk_boroughs"]]
          :controls {:initial-bounds [[51.16126063523994, -1.226348876953125], [51.84511093992763, 1.001129150390625]]
 
                     :map-options {:zoomControl true
