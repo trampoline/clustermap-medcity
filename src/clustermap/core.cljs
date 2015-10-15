@@ -240,7 +240,7 @@
                                            {:id :narrow-sector
                                             :type :tag-checkboxes
                                             :label "Narrow Sectors"
-                                            :sorted false
+                                            :sorted true
                                             :visible false
                                             :controls true
                                             :tag-type "l4_nontoxic_sector"
@@ -270,8 +270,8 @@
                                            {:id :highgrowth
                                             :type :checkboxes
                                             :label "Scaleups"
-                                            :visible true
-                                            :options [{:value "latest" :label "High growth companies" :filter scaleup-filter}
+                                            :visible false
+                                            :options [{:value "latest" :label "Show only high growth businesses" :filter scaleup-filter}
                                                       ]}
 
                                            {:id :bouroughs
@@ -325,7 +325,7 @@
                            :base-filters {:all nil}
                            :composed {}}
 
-   :about-modal {:content (constantly "About")
+   :about-modal {:content (constantly "Methodology")
                  :action (fn [& _] (-> ($ "#page-about") .modal))}
 
    :company-search {:controls {:search-fn api/company-search
