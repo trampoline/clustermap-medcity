@@ -243,7 +243,7 @@
                                             :sorted false
                                             :visible false
                                             :controls true
-                                            :tag-type "l4_sector"
+                                            :tag-type "l4_nontoxic_sector"
                                             :tags [{:value "comp_elec_manf" :label "Computer & Electronic manufacture"}
                                                    {:value "dig_comp_serv" :label "Digital & Computer services"}
                                                    {:value "med_opt_equip_manf" :label "Medical & optical equipment manufacture"}
