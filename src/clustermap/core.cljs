@@ -31,6 +31,7 @@
    [clustermap.components.nav-button :as nav-button]
    [clustermap.components.action-button :as action-button]
    [clustermap.components.action-link :as action-link]
+   [clustermap.components.chart-helpers :as chart-helpers]
    [clustermap.boundarylines :as bl]
    [cljs.core.async :refer [chan <! put! sliding-buffer >!]]
    [schema.core :as s :refer-macros [defschema]]))
@@ -124,26 +125,10 @@
                   (app/navigate @app-instance "company"))}
    name])
 
-(defn remove-boro [text]
+(defn remove-boro
+  "Remove annoying boro text"
+  [text]
   (-> text str (str/replace  " London Boro" "")))
-
-(defn money-point-formatter []
-  "Format highcharts tooltip as normal but with the y-value formatted
-  for money. Also remove boro. Add percentage if present"
-  (this-as this
-    (let [key (some-> this .-key remove-boro)
-          pc (some-> this .-percentage (num/mixed {:dec 1}))
-          series-name (-> this .-series .-name)
-          value (num/mixed (.-y this))]
-      (str "<span style=\"font-size: 10px\">"
-           key
-           "</span>"
-           "<br /><span style=\"color:#b71300\">"
-           series-name
-           "</span>: <b>"
-           value
-           (when pc (str " (" pc "%)"))
-           "</b><br/>"))))
 
 (defn sign-icon
   [n]
@@ -588,7 +573,7 @@
                              :metrics {:variable :!turnover :title "Turnover by reported year (£)" :metric :sum}
                              :interval "year"
                              :before "2013-01-01"}
-                     :point-formatter money-point-formatter
+                     :point-formatter (chart-helpers/mk-tooltip-point-formatter {})
                      :color "#b71300"
                      :timeline-data nil}
 
@@ -622,7 +607,7 @@
                                  :label-formatter (fn [] (this-as this (num/mixed (.-value this))))}]
                       :bar-width 20
                       :chart-height 300
-                      :point-formatter money-point-formatter
+                      :point-formatter (chart-helpers/mk-tooltip-point-formatter {})
                       :bar-color "#b71300"
                       :chart-type "pie"
                       :tag-type "nontoxic_sector"
@@ -643,7 +628,7 @@
                        :chart-height 750
                        :bar-color "#b71300"
                        :xlabel-formatter (fn [] (this-as this (some-> this .-value remove-boro)))
-                       :point-formatter money-point-formatter
+                       :point-formatter (chart-helpers/mk-tooltip-point-formatter {:key-fmt remove-boro})
                        :chart-type "bar"
                        :tag-type "uk_boroughs"
                        :tag-data nil
