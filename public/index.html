@@ -72,6 +72,7 @@
             </div>
             <ul class="nav-links">
               <li class="link-intro"><a href="#">Introduction</a></li>
+              <li id="about" class="link-about"><a href="#" onclick="$('#page-about').modal()">Methodology</a></li>
               <li class="link-login">
                 <!-- a(href="#") Login-->
               </li>
@@ -87,8 +88,26 @@
       </div>
       <div class="grdr">
         <div id="intro" class="grdc intro">
-          <h2><a href="http://www.medcitylondon.com/" target="_blank">London Tech Map</a></h2>
-          <p>Intro text here</p>
+          <h2><a href="//techmaplondon.com/" target="_blank">Tech Map London</a></h2>
+          <p>
+            Commissioned by the Mayor of London, the platform
+             provides an unprecedentedly detailed picture of London&#8217;s
+             vibrant science and technology sector. Through a combination
+             of map visualisations, charts and tabular data the platform
+             reveals the massive contribution the sector makes to
+             London&#8217;s economy. The platform showcases the sector&#8217;s
+             impressive growth highlighting where businesses are based,
+             where sectoral clusters are emerging and how fast firms are
+             expanding. Filter controls narrow the focus to individual
+             boroughs or sectors. A selection of charts provides analysis
+             and tracks trends over the past 10 years. A profile for each
+             company reports its turnover, employee numbers and board
+             members. The underlying data is sourced from official
+             Companies House records and will be updated quarterly. Tech
+             Map London cements the city&#8217;s status as a global centre for
+             science and technology businesses. Tech Map London was
+             funded by the London Enterprise Panel.
+          </p>
         </div>
       </div>
       <div class="grdr">
@@ -213,7 +232,9 @@
                               </div>
                               <div class="panel">
                                 <div class="panel-heading">
-                                  <h4>Trends<small>(grouped by reported year)</small></h4>
+                                  <h4>Trends
+                                    <!--small (grouped by reported year)-->
+                                  </h4>
                                   <div><span id="trends-timeline-var-select-component" class="custom-select"></span></div>
                                 </div>
                                 <div class="panel-body">
@@ -225,7 +246,7 @@
                                   <div class="panel-row">
                                     <div class="panel">
                                       <div class="panel-heading">
-                                        <h4>Company size - latest turnover<small>(UK-wide, companies with data available)</small></h4>
+                                        <h4>Company size by latest turnover<small>(where data is available)</small></h4>
                                       </div>
                                       <div class="panel-body">
                                         <div id="revenue-bands-chart-component" class="chart-container"></div>
@@ -233,7 +254,7 @@
                                     </div>
                                     <div class="panel">
                                       <div class="panel-heading">
-                                        <h4>Company size - latest employees<small>(UK-wide, companies with data available)</small></h4>
+                                        <h4>Company size by latest employees<small>(where data is available)</small></h4>
                                       </div>
                                       <div class="panel-body">
                                         <div id="employment-bands-chart-component" class="chart-container"></div>
@@ -255,7 +276,7 @@
                             <section id="credits" class="section section-credits view view-main">
                               <header>
                                 <h3>Supporters</h3>
-                                <h4>Thanks to the following organisations</h4>
+                                <h4>Tech Map London is brought to you by the following organisations<img src="/img/techmap_logos.jpg" class="center"></h4>
                               </header>
                             </section>
                             <section id="company-info" class="section section-company-info view view-company hide">
@@ -398,6 +419,29 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="page-about" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+            <h4>Methodology</h4>
+          </div>
+          <div id="page-about-content" class="modal-body">
+            <ul>
+              <li>Tech Map London provides data and analysis covering every science and technology businesses in Greater London.</li>
+              <li>This is the first time a major city has mapped an entire industry sector in this way.</li>
+              <li>All business information is sourced from Companies House filings.</li>
+              <li>Sectoral boundaries conform to the UK Office of National Statistics definition of the Science and Technology sector</li>
+              <li>Companies with fewer than 50 employees are not required to report how many people they employ. In these cases an estimate is made based on the ratio between turnover and employees for other companies in the same sector.</li>
+              <li>Where a company reports its balance sheet but not turnover, the turnover is estimated based on the ratio between balance sheet and turnover for other companies in the same sector.</li>
+              <li>If a company has its registered office in Greater London but data is available on branches elsewhere in the UK, turnover and employment are divided equally between the offices.</li>
+            </ul>
+            <div class="centre"><img src="/img/geovation.png" style="display: block; margin: 0 auto; padding: 5px;" class="centre"></div>
+            <div style="text-align: center"> Mapping Partner</div>
           </div>
         </div>
       </div>
