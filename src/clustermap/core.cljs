@@ -138,7 +138,7 @@
       (str "<span style=\"font-size: 10px\">"
            key
            "</span>"
-           "<br /><span style=\"color:#28828a\">"
+           "<br /><span style=\"color:#b71300\">"
            series-name
            "</span>: <b>"
            value
@@ -278,7 +278,7 @@
                                             :type :tag-checkboxes
                                             :label "Boroughs"
                                             :sorted true
-                                            :visible true
+                                            :visible false
                                             :controls true
                                             :tag-type "uk_boroughs"
                                             :tags [{:value "osbl_district_borough_unitary_region__camden_london_boro" :label "Camden"}
@@ -589,7 +589,7 @@
                              :interval "year"
                              :before "2013-01-01"}
                      :point-formatter money-point-formatter
-                     :color "#28828a"
+                     :color "#b71300"
                      :timeline-data nil}
 
    :company-turnover-timeline {:query {:index-name "company-accounts"
@@ -597,7 +597,7 @@
                                        :time-variable "?accounts_date"
                                        :metrics {:variable :!turnover :title "Turnover (UK-wide, grouped by reported year) (£)"}
                                        :interval "year"}
-                               :color "#28828a"
+                               :color "#b71300"
                                :timeline-data nil}
 
    :company-employment-timeline {:query {:index-name "company-accounts"
@@ -605,7 +605,7 @@
                                          :time-variable "?accounts_date"
                                          :metrics {:variable :!employee_count :title "Employees by reported year"}
                                          :interval "year"}
-                                 :color "#28828a"
+                                 :color "#b71300"
                                  :timeline-data nil}
 
    :geo-sponsors {:controls {:max-count 1}
@@ -623,7 +623,7 @@
                       :bar-width 20
                       :chart-height 300
                       :point-formatter money-point-formatter
-                      :bar-color "#28828a"
+                      :bar-color "#b71300"
                       :chart-type "pie"
                       :tag-type "nontoxic_sector"
                       :tag-data nil
@@ -641,7 +641,7 @@
                                   :label-formatter (fn [] (this-as this (num/mixed (.-value this))))}]
                        :bar-width 10
                        :chart-height 750
-                       :bar-color "#28828a"
+                       :bar-color "#b71300"
                        :xlabel-formatter (fn [] (this-as this (some-> this .-value remove-boro)))
                        :point-formatter money-point-formatter
                        :chart-type "bar"
@@ -686,7 +686,7 @@
                                  {:key "500k"  :label "£500k - £1m"}
                                  {:key "1m"  :label "£1m - £5m"}
                                  {:key "5m" :label "More than £5m"}]
-                          :color "#28828a"
+                          :color "#b71300"
                           :render-fn (fn [v] (num/fnum v))}
                    :table-data nil}
 
@@ -731,7 +731,7 @@
                                     {:key "250"  :label "250-499"}
                                     {:key "500"  :label "500-2499"}
                                     {:key "2500" :label "2500 or more"}]
-                             :color "#28828a"
+                             :color "#b71300"
                              :render-fn (fn [v] (num/fnum v))}
                       :table-data nil}
 
