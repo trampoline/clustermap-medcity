@@ -14,6 +14,29 @@
             [clustermap.formats.time :as time]
             [clustermap.components.timeline-chart :as timeline-chart]))
 
+(def l4-sector-tag->description
+  {"aud_vis_broad" "Audio-visual broadcasting",
+   "arch_eng_surv" "Architecture, engineering & quantity surveying",
+   "manf_rep_air_space" "Manufacture and repair of air and spacecraft",
+   "pub_mktg_graph_des" "Publishing, Marketing & Graphic Design",
+   "dig_comp_serv" "Digital & Computer services",
+   "comp_elec_manf" "Computer & Electronic manufacture",
+   "aero_transp" "Aerospace transport",
+   "telecomm_serv" "Telecommunication services",
+   "humanitities_randd" "Scientific research & development",
+   "biotech_randd" "Biotechnology research and development",
+   "healthcare_serv" "Healthcare services including veterinary",
+   "chem_manf" "Chemical Product manufacturing",
+   "non_elec_mach_manf" "Non-electrical machinery manufacture",
+   "pharm_manf" "Pharmaceutical manufacture",
+   "def_tech" "Defence technologies",
+   "precision_eng" "Precision engineering",
+   "med_opt_equip_manf" "Medical & optical equipment manufacture",
+   "higher_ed" "Higher education",
+   "elec_mach_manf" "Electrical Machinery manufacture",
+   "auto_manf" "Automotive manufacture",
+   "comm_equip_manf" "Communication Equipment manufacture"})
+
 (defn render-metadata-row
   [record {:keys [key label render-fn] :or {render-fn identity} :as field}]
   [[:div.tbl-cell label]
@@ -56,7 +79,11 @@
           [:li
            [:h4 "Sector"]
            [:p
-            (some->> record :tags (filter #(= "l4_sector" (:type %))) first :description)]]
+            (some->> record :tags
+                     (filter #(contains? #{"l4_sector" "l4_nontoxic_sector"} (:type %)))
+                     first
+                     :tag ;; :description ;; fix while meta data not in db
+                     l4-sector-tag->description)]]
           [:li
            [:h4 "Segment"]
            [:p
