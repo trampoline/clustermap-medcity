@@ -259,7 +259,7 @@
                                             :options [{:value "latest" :label "Show only high growth businesses" :filter scaleup-filter}
                                                       ]}
 
-                                           {:id :bouroughs
+                                           {:id :boroughs
                                             :type :tag-checkboxes
                                             :label "Boroughs"
                                             :sorted true
@@ -278,6 +278,7 @@
                                                    {:value "osbl_district_borough_unitary_region__tower_hamlets_london_boro" :label "Tower Hamlets"}
                                                    {:value "osbl_district_borough_unitary_region__wandsworth_london_boro" :label "Wandsworth"}
                                                    {:value "osbl_district_borough_unitary_region__city_of_westminster_london_boro" :label "Westminster"}
+                                                   {:value "osbl_district_borough_unitary_region__city_and_county_of_the_city_of_london" :label "City and County of the City of London"}
                                                    {:value "osbl_district_borough_unitary_region__barking_and_dagenham_london_boro" :label "Barking and Dagenham"}
                                                    {:value "osbl_district_borough_unitary_region__barnet_london_boro" :label "Barnet"}
                                                    {:value "osbl_district_borough_unitary_region__bexley_london_boro" :label "Bexley"}
@@ -292,10 +293,12 @@
                                                    {:value "osbl_district_borough_unitary_region__hillingdon_london_boro" :label "Hillingdon"}
                                                    {:value "osbl_district_borough_unitary_region__hounslow_london_boro" :label "Hounslow"}
                                                    {:value "osbl_district_borough_unitary_region__kingston_upon_thames_london_boro" :label "Kingston upon Thames"}
-                                                   {:value "osbl_district_borough_unitary_region__merton_london_boro" :label "Newham"}
+                                                   {:value "osbl_district_borough_unitary_region__merton_london_boro" :label "Merton"}
+                                                   {:value "osbl_district_borough_unitary_region__newham_london_boro" :label "Newham"}
                                                    {:value "osbl_district_borough_unitary_region__redbridge_london_boro" :label "Redbridge"}
                                                    {:value "osbl_district_borough_unitary_region__richmond_upon_thames_london_boro" :label "Richmond upon Thames"}
                                                    {:value "osbl_district_borough_unitary_region__sutton_london_boro" :label "Sutton"}
+                                                   {:value "osbl_district_borough_unitary_region__waltham_forest_london_boro" :label "Waltham Forest"}
                                                    ]}
 
                                            ]
@@ -303,7 +306,7 @@
                          ;; base-filters AND combined with dynamic components
                          }
 
-   :dynamic-filter-description-components [:boundaryline #_:uk_region #_:sector :highgrowth :segments ]
+   :dynamic-filter-description-components [:boundaryline :sector :narrow-sector :highgrowth :segments :boroughs]
 
    :selection-filter-spec {:id :selection-filter
                            :components {:natural_id nil}
@@ -734,7 +737,7 @@
                                      (get-in @(get-app-state-atom) [:map :controls :initial-bounds])))
                     :class "btn btn-default"}
 
-   :reset-all {:content (constantly [:h1.logo "MedCity"])
+   :reset-all {:content (constantly [:h1.logo "Tech Map London"])
                :action (fn [e]
                          (js/console.log "reset all")
                          (.preventDefault e)
