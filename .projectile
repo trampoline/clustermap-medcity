@@ -1,6 +1,11 @@
 -/bower_components
 -/cljs-out
 -/node_modules
--/public
+-/public/js
+-/public/css
+-/public/img
+-/public/clustermap.js
+-/public/clustermap.js.map
+-/public/resources
 -/resources
 -/target
