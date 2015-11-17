@@ -20,10 +20,10 @@
     
     -->
     <meta name="author" content="Trampoline Systems Ltd">
-    <link type="text/css" rel="stylesheet" href="http://api.tiles.mapbox.com/mapbox.js/v1.6.4/mapbox.css">
+    <link type="text/css" rel="stylesheet" href="//api.tiles.mapbox.com/mapbox.js/v1.6.4/mapbox.css">
     <link type="text/css" rel="stylesheet" href="css/app.css">
     <script type="text/javascript" src="js/polyfills.js"></script>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.2.min.js"></script><!--[if lte IE 7]>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.2.min.js"></script><!--[if lte IE 7]>
     <script type="text/javascript">$(document).ready(function(){ $('html').addClass('ie7'); });</script><![endif]-->
     <!--[if IE 8]>
     <script type="text/javascript">$(document).ready(function(){ $('html').addClass('ie8'); });</script><![endif]-->
@@ -39,9 +39,8 @@
       });
       
     </script>
-    <script type="text/javascript" src="http://api.tiles.mapbox.com/mapbox.js/v1.6.4/mapbox.js"></script>
+    <script type="text/javascript" src="//api.tiles.mapbox.com/mapbox.js/v1.6.4/mapbox.js"></script>
     <script type="text/javascript" src="js/vendor.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/0.9.0/react.js"></script>
     <!--begin-static-app-config-->
     <script type="text/javascript">window.config={"api":{"prefix": "medcity"}}</script>
     <!--end-static-app-config-->
@@ -440,23 +439,26 @@
               <li>Where a company reports its balance sheet but not turnover, the turnover is estimated based on the ratio between balance sheet and turnover for other companies in the same sector.</li>
               <li>If a company has its registered office in Greater London but data is available on branches elsewhere in the UK, turnover and employment are divided equally between the offices.</li>
             </ul>
-            <div class="centre"><a href="http://www.geovation.uk/" target="_blank"><img src="/img/GeovationLogo_standard_portrait.png" style="display: block; margin: 0 auto; padding: 15px; width:310px" class="centre"></a></div>
+            <div class="centre"><a href="http://www.geovation.uk/" target="_blank"><img src="/img/GeovationLogo_standard_portrait.png" alt="Geovation Logo" style="display: block; margin: 0 auto; padding: 15px; width:310px" class="centre"></a></div>
             <div style="text-align: center"> Mapping Partner</div>
+            <div>&nbsp;</div>
+            <div class="centre"><a href="http://www.sqw.co.uk/" target="_blank"><img src="/img/logo_sqw_big.gif" alt="SQW Logo" style="display: block; margin: 0 auto; padding: 15px; " class="centre"></a></div>
+            <div style="text-align: center"> Research Partner</div>
           </div>
         </div>
       </div>
     </div>
     <!--begin-static-base-js-->
-    <script type="text/javascript" src="cljs/goog/base.js"></script>
     <!--end-static-base-js-->
     <!--base-js
-    {{{base-js}}}
+    //- {{{base-js}}}
     
     -->
-    <!--begin-static-dynamic-js--><script type="text/javascript" src="clustermap.js"></script><script type="text/javascript">goog.require("clustermap.core");</script>
+    <!--begin-static-dynamic-js--><script type="text/javascript" src="clustermap.js"></script>
     <!--end-static-dynamic-js-->
     <!--dynamic-js
-    <script type="text/javascript" src="clustermap.js"></script><script type="text/javascript">goog.require("clustermap.core");</script>
+    <script type="text/javascript" src="clustermap.js"></script>
+    
     
     -->
     <!--begin-static-repl-js-->
