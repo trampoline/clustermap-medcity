@@ -28,6 +28,7 @@
    [clustermap.components.filter-description :as filter-description]
    [clustermap.components.text :as text]
    [clustermap.components.company-info :as company-info]
+   [clustermap.components.edit-company :as edit-company]
    [clustermap.components.nav-button :as nav-button]
    [clustermap.components.action-button :as action-button]
    [clustermap.components.action-link :as action-link]
@@ -352,6 +353,16 @@
                                       {:key :directorships
                                        :label "Directors"
                                        :render-fn (fn [ds] (for [d ds] [:div (:name d)]))}]}
+                  :record nil}
+
+   :edit-company-name {:path [:name]}
+
+   :edit-company {:controls {:index "companies"
+                             :index-type "company"
+                             :sort-spec nil
+                             :size 1
+                             :title-field :name
+                             :new-company nil}
                   :record nil}
 
    :map {:type :geoport
@@ -725,6 +736,18 @@
 
    :view :trends
 
+   :new-company-edit {:content (constantly "Add company")
+                      :action (partial edit-company/edit-new-company-fn app-instance)}
+
+   :company-edit {:text "Edit"
+                  :class "btn btn-primary"
+                  :action (partial edit-company/edit-company-fn
+                                   app-instance make-company-selection)}
+
+   :edit-company-close {:text "Close"
+                        :target-view "main"
+                        :class "btn btn-primary"}
+
    :company-close {:text "Close"
                    :target-view "main"
                    :class "btn btn-primary"}
@@ -790,6 +813,16 @@
     :f action-link/action-link-component
     :target "about"
     :paths {:action-link [:about-modal]}}
+
+   {:name :new-company-edit
+    :f action-link/action-link-component
+    :target "new-company-edit"
+    :paths {:action-link [:new-company-edit]}}
+
+   {:name :company-edit
+    :f action-button/action-button-component
+    :target "company-edit"
+    :paths {:action-button [:company-edit]}}
 
    {:name :company-close
     :f nav-button/nav-button-component
@@ -957,6 +990,17 @@
             :employment-timeline [:company-employment-timeline]
             :filter-spec [:selection-filter-spec :composed :all]}}
 
+   {:name :edit-company-name
+    :f text/text-component
+    :target "edit-company-name-component"
+    :paths {:source [:edit-company :record]
+            :controls [:edit-company-name]}}
+
+   {:name :edit-company
+    :f edit-company/edit-company-component
+    :target "edit-company-component"
+    :paths {:metadata [:edit-company]
+            :filter-spec [:selection-filter-spec :composed :all]}}
    ]
   )
 
@@ -983,7 +1027,10 @@
         {:fetch-boundarylines-fn (partial bl/get-or-fetch-best-boundarylines (app/get-state app) :boundarylines)
          :get-cached-boundaryline-fn (partial bl/get-cached-boundaryline (app/get-state app) :boundarylines)
          :point-in-boundarylines-fn (partial bl/point-in-boundarylines (app/get-state app) :boundarylines :uk_boroughs)
-         :path-marker-click-fn make-boundaryline-selection})
+         :path-marker-click-fn make-boundaryline-selection
+         :submit-company-fn #(api/POST (str "/api/" api/api-prefix "/gla/submit-company")
+                                       % :send-error true)
+         :fetch-metadata-fn (api/records-factory)})
 
       (destroy [this app]
         (.log js/console "DESTROY APP!"))
