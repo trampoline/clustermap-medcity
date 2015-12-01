@@ -7,7 +7,8 @@
                  [org.clojure/core.async "0.2.374" :scope "provided"]
                  [domina "1.0.3"]
                  [jayq "2.5.4"]
-                 [org.omcljs/om "0.9.0"]
+                 ;; [org.omcljs/om "0.9.0"]
+                 [org.omcljs/om "1.0.0-alpha21"]
                  [prismatic/om-tools "0.4.0" :exclusions [org.clojure/clojure]]
                  [sablono "0.4.0"]
                  [cljsjs/bootstrap "3.3.5-0"]
@@ -32,10 +33,15 @@
   :clean-targets ^{:protect false} ["cljs-out"]
 
   :plugins [[lein-cljsbuild "1.1.1"]
-            [lein-figwheel "0.5.0-1"]]
+            [lein-figwheel "0.5.0-2"]]
 
   :profiles {:dev {:dependencies [[weasel "0.7.0"]
-                                  [figwheel "0.5.0-1"]]}}
+                                  [figwheel "0.5.0-2"]
+                                  [figwheel-sidecar "0.5.0-2"]
+                                  [com.cemerick/piggieback "0.2.1"]]}}
+
+  :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
+
   :figwheel {:css-dirs ["public/css"]}
 
   :cljsbuild {
