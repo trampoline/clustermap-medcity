@@ -1030,7 +1030,7 @@
          :path-marker-click-fn make-boundaryline-selection
          :submit-company-fn #(api/POST (str "/api/" api/api-prefix "/gla/submit-company")
                                        % :send-error true)
-         :fetch-metadata-fn (api/records-factory)})
+         :fetch-metadata-factory api/records-factory})
 
       (destroy [this app]
         (.log js/console "DESTROY APP!"))
