@@ -202,7 +202,7 @@
                                            {:id :sector
                                             :type :tag-checkboxes
                                             :label "Sector"
-                                            :sorted false
+                                            :sorted true
                                             :visible true
                                             :controls true
                                             :tag-type "l4_sector"
@@ -210,6 +210,7 @@
                                                    {:value "pharm_manf" :label "Pharmaceutical manufacture"}
                                                    {:value "med_opt_equip_manf" :label "Medical (exc. pharmaceutical) & optical equipment manufacture"}
                                                    {:value "biotech_randd" :label "Biotechnology research and development"}
+                                                   {:value "healthcare" :label "Healthcare"}
                                                    ]}
 
                                            {:id :highgrowth
@@ -222,7 +223,7 @@
                                            {:id :segments
                                             :type :tag-checkboxes
                                             :label "Segments"
-                                            :sorted false
+                                            :sorted true
                                             :visible false
                                             :controls true
                                             :tag-type "bis_l1p1_sector"
@@ -264,7 +265,7 @@
                                                    {:value "MTQ" :label "Assistive Technology"}
                                                    {:value "MTR" :label "Mobility Access"}
                                                    {:value "MTS" :label "Hospital hardware including ambulatory"}
-                                                   {:value "MTT" :label "ICT+ E-health"}
+                                                   {:value "MTT" :label "Digital Health"}
                                                    {:value "MTU" :label "Professional services, Consultancy"}
                                                    {:value "MTV" :label "Education and Training"}
                                                    {:value "MTX" :label "Specialist Suppliers/Supply Chain"}
