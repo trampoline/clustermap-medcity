@@ -142,7 +142,10 @@
                                              :boundarylines {}}
                                  "uk_regions" {:index nil
                                                :rtree nil
-                                               :boundarylines {}}}
+                                               :boundarylines {}}
+                                 "osni_pc" {:index nil
+                                            :rtree nil
+                                            :boundarylines {}}}
                    :boundarylines {}}
 
    :dynamic-filter-spec {:id :coll
@@ -210,6 +213,7 @@
                                                    {:value "pharm_manf" :label "Pharmaceutical manufacture"}
                                                    {:value "med_opt_equip_manf" :label "Medical (exc. pharmaceutical) & optical equipment manufacture"}
                                                    {:value "biotech_randd" :label "Biotechnology research and development"}
+                                                   {:value "healthcare" :label "Healthcare"}
                                                    ]}
 
                                            {:id :highgrowth
@@ -336,8 +340,8 @@
          ;; :boundaryline-collections [[0 "nuts_2"] [8 "nuts_3"] [9 "uk_boroughs"] [11 "uk_wards"]]
          ;; :boundaryline-collections [[0 "nuts_2"] [8 "nuts_3"] [9 "nutsish_4"] [11 "nutsish_5"]]
          ;; :boundaryline-collections [[0 "uk_boroughs"] [10 "uk_wards"]]
-         :boundaryline-collections [[0 "uk_regions"][9 "uk_boroughs"][11 "uk_wards"]]
-         :controls {:initial-bounds  [[50.56230444080573 -1.9775390625][53.02139221293762 1.8182373046875]]
+         :boundaryline-collections [[0 "nuts_1"][9 "uk_boroughs"][11 "uk_wards"]]
+         :controls {:initial-bounds  [[58.7 5.3] [49.29 -11.29]]
                     :map-options {:zoomControl true
                                   :dragging true
                                   :touchZoom true
@@ -398,6 +402,7 @@
                     :zoom nil
                     :bounds nil
                     :show-points true
+                    ::map/points-max-count 1200
                     :boundaryline-collection nil
                     :boundaryline-agg {:type :stats
                                        :index "companies"
@@ -431,9 +436,9 @@
                                           :index-type "company"
                                           :nested-path "?tags"
                                           :nested-attr "tag"
-                                          :nested-filter {:term {:type "uk_regions"}}
+                                          :nested-filter {:term {:type "nuts_1"}}
                                           :stats-attr "?count"}
-                                  :tag-type "uk_regions"
+                                  :tag-type "nuts_1"
                                   :show-at-zoom-fn (fn [z] (< z 9))
                                   :colorchooser-factory-fn (fn [geotag-aggs]
                                                              (let [chooser-fn (num/table-chooser-fn
