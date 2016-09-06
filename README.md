@@ -30,3 +30,22 @@
     # now you have a frontend with live recompilation of html, less, and cljs
     # but you still need a backend to serve the frontend, expand the multi-tenant templates
     # and serve the api
+
+## using boot
+
+### developing
+
+    boot dev target -d cljs-out/none
+
+in clustermap-components:
+
+    boot auto-install
+
+To get a cljs-repl connect to nrepl in your editor and:
+
+    (start-repl)
+
+
+### production
+
+    boot production build target -d cljs-out/advanced
