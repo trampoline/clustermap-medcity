@@ -34,6 +34,7 @@
    [clustermap.boundarylines :as bl]
    [clustermap.util :refer [inspect]]
    [clustermap.component-specs :as component-specs]
+   [clustermap.bvca-table :as bvca-table]
    [cljs.core.async :refer [chan <! put! sliding-buffer >!]]
    [schema.core :as s :refer-macros [defschema]]))
 
@@ -41,6 +42,8 @@
 (def ^:private dev-mode (some-> js/window .-config .-repl))
 (when ^boolean js/goog.DEBUG
   (devtools/install! :all))
+(when-not ^boolean js/goog.DEBUG
+  (inspect (-> (js/Raven.config "https://878600a25b8942bcad31f3d8eaa51a71@app.getsentry.com/95447") .install)))
 
 ;; the IApp object
 (def ^:private app-instance (atom nil))
@@ -51,34 +54,6 @@
       deref
       clustermap.app/get-state))
 
-(def max-lag-months 22)
-
-;; tests that latest and previous accounts are not too old
-(def current-filter {:nested {:path "?accounts"
-                              :filter {:bool {:must [{:term {"rank" 1}}
-                                                     {:range {"accounts_date" {:gte (time/format-date (time/months-ago max-lag-months))}}}]}}}})
-
-;; scaleup query : is this a scaleup considering accounts of rank n
-;; (1 = latest, 2 = previous, 3 = 2 years prior etc)
-(defn scaleup-rank-filter
-  [n]
-  {:bool {:must [{:nested {:path "?accounts"
-                           :filter {:bool {:must [{:term {"rank" n}}
-                                                  {:range {"accounts_date" {:gte (time/format-date (time/months-ago (+ max-lag-months (* 12 (dec n)))))}}}
-                                                  {:range {"turnover_delta_norm" {:gte 0.2}}}]}}}}
-                 {:nested {:path "?accounts"
-                           :filter {:bool {:must [{:term {"rank" (inc n)}}
-                                                  {:range {"accounts_date" {:gte (time/format-date (time/months-ago (+ max-lag-months (* 12 n))))}}}
-                                                  {:range {"turnover_delta_norm" {:gte 0.2}}}
-                                                  {:range {"employee_count" {:gte 10}}}
-                                                  {:range {"turnover" {:gte 1000000}}}]}}}}]}})
-;; is this currently a scale-up
-(def scaleup-filter
-  (scaleup-rank-filter 1))
-
-;; was this a scaleup a year previously
-(def previous-scaleup-filter
-  (scaleup-rank-filter 2))
 
 (defn boundaryline-filter
   [boundaryline-id]
@@ -109,23 +84,28 @@
                  [:dynamic-filter-spec]
                  updated-filters))))))
 
-(defn make-company-selection
-  [natural-id]
-  (let [state-atom (get-app-state-atom)
-        components (get-in @state-atom [:selection-filter-spec :components])
-        components (assoc-in components [:natural-id] {:term {"?natural_id" natural-id}})
-        base-filters (get-in @state-atom [:selection-filter-spec :base-filters])
-        composed (filters/compose-filters components base-filters)]
-    (swap! state-atom update-in [:selection-filter-spec] merge {:components components :composed composed})))
-
 (defn company-link-render-fn
   [name record]
   [:a {:href "#"
        :target "_blank"
        :onClick (fn [e]
                   (.preventDefault e)
-                  (make-company-selection (:?natural_id record))
-                  (app/navigate @app-instance "company"))}
+                  (swap! (get-app-state-atom)
+                         (partial bvca-table/make-company-selection (:?natural_id record)))
+                  #_(app/navigate @app-instance "company-sites"))}
+   name])
+
+(defn investor-link-render-fn
+  [name record]
+  [:a {:href "#"
+       :target "_blank"
+       :onClick (fn [e]
+                  (.preventDefault e)
+                  (inspect "clicked investor" record)
+                  (swap! (get-app-state-atom)
+                         (partial bvca-table/make-investor-selection (:investor_company_uid record)))
+                  (inspect "maked investor")
+                  #_(app/navigate @app-instance "company-sites"))}
    name])
 
 (defn sign-icon
@@ -211,8 +191,8 @@
                                :render-fn (fn [r] [[:div (:name r)]])
                                :col-headers nil ;; ["Name"]
                                :click-fn (fn [r]
-                                           (make-company-selection (:natural_id r))
-                                           (app/navigate @app-instance "company"))
+                                           ;; (make-company-selection (:natural_id r))
+                                           #_(app/navigate @app-instance "company"))
                                }
                     :query nil
                     :results nil}
@@ -306,9 +286,10 @@
                                                    [:div.metric.metric-2
                                                     [:span.name "Emp"] [:span.value (num/compact (:latest_employee_count i))]]]])
                                :item-click-fn (fn [r e]
-                                                     (make-company-selection (:natural_id r))
-                                                     (app/navigate @app-instance "company")
-                                                     (.log js/console (clj->js ["CLICK" r e])))}
+                                                (swap! (get-app-state-atom)
+                                                       (partial bvca-table/make-company-selection (:?natural_id r)))
+                                                ;; (app/navigate @app-instance "company")
+                                                (.log js/console (clj->js ["CLICK" r e])))}
 
                     :zoom nil
                     :bounds nil
@@ -392,204 +373,99 @@
                                                             :metric :sum
                                                             :label (fn [] [:p "Total latest turnover\u00A0" [:small "(UK-wide)"]])
                                                             :render-fn (fn [v] (num/mixed v {:curr "£"}))}
-                                                           {:key :!latest_turnover_delta
-                                                            :belongs-to :!latest_turnover
-                                                            :metric :sum
-                                                            :label "Turnover change"
-                                                            :value-fn (fn [btv v] (* 100 (/ v btv)))
-                                                            :render-fn (fn [v] [:div.stat-change
-                                                                                (sign-icon v)
-                                                                                (num/mixed v)
-                                                                                "% year on year"])}
+
                                                            {:key :!latest_employee_count
                                                             :metric :sum
                                                             :label (fn [] [:p "Total latest employees\u00A0" [:small "(UK-wide)"]])
                                                             :render-fn (fn [v] (num/mixed v))}
-                                                           {:key :!latest_employee_count_delta
-                                                            :belongs-to :!latest_employee_count
-                                                            :metric :sum
-                                                            :label "Employment change"
-                                                            :value-fn (fn [btv v] (* 100 (/ v btv)))
-                                                            :render-fn (fn [v] [:div.stat-change
-                                                                                (sign-icon v)
-                                                                                (num/mixed v)
-                                                                                "% year on year"])}
                                                            ]}}
                     :summary-stats nil
                     }
 
-   :table  {:type :table
-            :controls {:index "companies"
-                       :index-type "company"
-                       :sort-spec {:!latest_turnover {:order "desc"}}
-                       :from 0
-                       :size 50
-                       :columns [
-                                 {:key :!name :sortable false :label "Name" :render-fn company-link-render-fn}
-                                 {:key :!formation_date :sortable true :label "Formation date" :render-fn #(time/format-date %)}
-                                 ;; {:key :!latest_accounts_date :label "Filing date" :render-fn #(time/format-date %)}
-                                 {:key :!latest_turnover
-                                  :sortable true
-                                  :label (fn [] [:div "Latest turnover\u0020" [:small "(UK-wide)"]])
-                                  :right-align true
-                                  :render-fn #(num/mixed % {:curr "£"})}
-                                 {:key :!latest_turnover_delta
-                                  :sortable true
-                                  :label (fn [] [:div "Turnover change\u0020" [:small "(year on year)"]])
-                                  :right-align true
-                                  :render-fn (fn [v r]
-                                               (when v
-                                                 [:span
-                                                  (num/mixed v {:curr "£"})
-                                                  (sign-icon v)]))}
-                                 {:key :!latest_employee_count
-                                  :sortable true
-                                  :label (fn [] [:div "Latest employees\u0020" [:small "(UK-wide)"]])
-                                  :right-align true
-                                  :render-fn #(num/mixed %)}
-                                 {:key :!latest_employee_count_delta
-                                  :sortable true
-                                  :label (fn [] [:div "Employees change\u0020" [:small "(year on year)"]])
-                                  :right-align true
-                                  :render-fn (fn [v r]
-                                               (when v
-                                                 [:span
-                                                  (num/mixed v)
-                                                  (sign-icon v)]))}
+   :table  {:type :multi-table
+            :current-table :companies-table
+            :default-table :companies-table
+            :tables {:companies-table {:controls {:index "companies"
+                                                  :index-type "company"
+                                                  :title "All investor-backed companies"
+                                                  :sort-spec {:!latest_turnover {:order "desc"}}
+                                                  :from 0
+                                                  :size 50
+                                                  :columns [
 
-                                 ]}
-            :table-data nil}
 
-   :trends-timeline {:query {:index-name "company-accounts"
-                             :index-type "accounts"
-                             :time-variable "?accounts_date"
-                             :metrics {:variable :!turnover :title "Turnover (UK-wide) (£)" :metric :sum}
-                             :interval "year"
-                             :before "2013-01-01"}
-                     :color "#28828a"
-                     :timeline-data nil}
+                                                            {:key :!name :sortable false :label "Investor-backed company" :render-fn company-link-render-fn}
+                                                            {:key :?investor_companies :sortable false :label "Investor"
+                                                             :render-fn (fn [n r]
+                                                                          (for [rec n] (investor-link-render-fn (:name rec) rec)))}
+                                                            {:key :fixme :sortable false :label "Constituency" :render-fn company-link-render-fn}
+                                                            {:key :!latest_turnover
+                                                             :sortable true
+                                                             :label (fn [] [:div "Latest turnover\u0020" [:small "(UK-wide)"]])
+                                                             :right-align true
+                                                             :render-fn #(num/mixed % {:curr "£"})}
 
-   :company-turnover-timeline {:query {:index-name "company-accounts"
-                                       :index-type "accounts"
-                                       :time-variable "?accounts_date"
-                                       :metrics {:variable :!turnover :title "Turnover (UK-wide, grouped by reported year) (£)"}
-                                       :interval "year"}
-                               :color "#28828a"
-                               :timeline-data nil}
+                                                            {:key :!latest_employee_count
+                                                             :sortable true
+                                                             :label (fn [] [:div "Latest employees\u0020" [:small "(UK-wide)"]])
+                                                             :right-align true
+                                                             :render-fn #(num/mixed %)}
+                                                            ]}
+                                       :table-data nil}
 
-   :company-employment-timeline {:query {:index-name "company-accounts"
-                                         :index-type "accounts"
-                                         :time-variable "?accounts_date"
-                                         :metrics {:variable :!employee_count :title "Employees (UK-wide, grouped by reported year)"}
-                                         :interval "year"}
-                                 :color "#28828a"
-                                 :timeline-data nil}
+                     :sites-table {:type :table
+                                   :controls {:index "company-sites"
+                                              :index-type "company_site"
+                                              :title "Investor-backed company"
+                                              :sort-spec {:!latest_turnover {:order "desc"}}
+                                              :from 0
+                                              :size 50
+                                              :columns [{:key :!name :sortable false :label "Investor-backed company"}
+                                                        {:key :?postcode :sortable false :label "Postcode" }
+
+                                                        {:key :?investor_companies :sortable false
+                                                         :label "Investor"
+                                                         :render-fn (fn [n r]
+                                                                      (for [rec n] (investor-link-render-fn (:name rec) rec)))}
+                                                        {:key :!latest_turnover
+                                                         :sortable true
+                                                         :label (fn [] [:div "Latest turnover\u0020" [:small "(UK-wide)"]])
+                                                         :right-align true
+                                                         :render-fn #(num/mixed % {:curr "£"})}
+                                                        {:key :!latest_employee_count
+                                                         :sortable true
+                                                         :label (fn [] [:div "Latest employees\u0020" [:small "(UK-wide)"]])
+                                                         :right-align true
+                                                         :render-fn #(num/mixed %)}]}
+                                   :table-data nil}
+
+                     :investors-table {:type :table
+                                       :controls {:index "investments"
+                                                  :index-type "investment"
+                                                  :title "Investor"
+                                                  :sort-spec {:!company_name {:order "desc"}}
+                                                  :fields [:?investment_uid :!company_name :?company_site_postcode :?investor_company_name]
+                                                  :from 0
+                                                  :size 50
+                                                  :columns [
+                                                            {:key :!company_name :sortable false :label "Investor-backed company" :render-fn company-link-render-fn}
+                                                            {:key :?investor_company_name :sortable false :label "Investor"}
+                                                            {:key :?postcode :sortable false :label "Constituency"}
+                                                            {:key :!latest_turnover
+                                                             :sortable true
+                                                             :label (fn [] [:div "Latest turnover\u0020" [:small "(UK-wide)"]])
+                                                             :right-align true
+                                                             :render-fn #(num/mixed % {:curr "£"})}
+                                                            {:key :!latest_employee_count
+                                                             :sortable true
+                                                             :label (fn [] [:div "Latest employees\u0020" [:small "(UK-wide)"]])
+                                                             :right-align true
+                                                             :render-fn #(num/mixed %)}]}
+                                       :table-data nil}}}
 
    :geo-sponsors {:controls {:max-count 1}
                   :data nil}
 
-   :sector-histogram {:query {:index-name "companies"
-                              :index-type "company"
-                              :nested-path "?tags"
-                              :nested-attr "tag"
-                              :nested-filter {:term {:type "l4_sector"}}
-                              :stats-attr "!latest_turnover"}
-                      :metrics [{:metric :sum
-                                 :title "Total latest turnover (UK-wide) (£)"
-                                 :label-formatter (fn [] (this-as this (num/mixed (.-value this))))}]
-                      :bar-width 20
-                      :chart-height 200
-                      :bar-color "#28828a"
-
-                      :tag-type "l4_sector"
-                      :tag-data nil
-                      :tag-agg-data nil}
-
-   :revenue-bands {:query {:index-name "companies"
-                           :index-type "company"
-
-                           :row-path [:accounts :row]
-                           :row-aggs {:accounts
-                                      {:nested {:path "?accounts"}
-
-                                       :aggs
-                                       {:row {:range {:field "rank"
-                                                      :ranges [{:key "latest" :from 1 :to 2}]}}}} }
-
-                           :col-path [:col]
-                           :col-aggs {:col
-                                      {:range {:field "turnover"
-                                               :ranges [{:key "lt50k" :from 0       :to 50000 }
-                                                        {:key "50k"   :from 50000   :to 100000 }
-                                                        {:key "100k"  :from 100000  :to 250000 }
-                                                        {:key "250k"  :from 250000  :to 500000}
-                                                        {:key "500k"  :from 500000  :to 1000000}
-                                                        {:key "1m"    :from 1000000 :to 5000000}
-                                                        {:key "5m"    :from 5000000 }] }}
-                                      :no-col-data {:missing {:field "turnover"}}}
-
-                           :metric-path [:companies :metric]
-                           :metric-aggs {:companies
-                                         {:reverse_nested {}
-                                          :aggs
-                                          {:metric {:value_count {:field "?natural_id"}}}}}
-                           }
-                   :view {:rows [{:key "latest" :label "latest reported"}]
-                          :cols [{:key "lt50k"  :label "Less than £50k"}
-                                 {:key "50k"  :label "£50k - £100k"}
-                                 {:key "100k" :label "£100k - £250k"}
-                                 {:key "250k"   :label "£250k - £500k"}
-                                 {:key "500k"  :label "£500k - £1m"}
-                                 {:key "1m"  :label "£1m - £5m"}
-                                 {:key "5m" :label "More than £5m"}]
-                          :color "#28828a"
-                          :render-fn (fn [v] (num/fnum v))}
-                   :table-data nil}
-
-   :employment-bands {:query {:index-name "companies"
-                              :index-type "company"
-
-                              :row-path [:accounts :row]
-                              :row-aggs {:accounts
-                                         {:nested {:path "?accounts"}
-
-                                          :aggs
-                                          {:row {:range {:field "rank"
-                                                         :ranges [{:key "latest" :from 1 :to 2}]}}}} }
-
-                              :col-path [:col]
-                              :col-aggs {:col
-                                         {:range {:field "employee_count"
-                                                  :ranges [{:key "l"    :from 1    :to 5 }
-                                                           {:key "5"    :from 5    :to 10 }
-                                                           {:key "10"   :from 10   :to 20 }
-                                                           {:key "20"   :from 20   :to 50 }
-                                                           {:key "50"   :from 50   :to 100 }
-                                                           {:key "100"  :from 100  :to 250 }
-                                                           {:key "250"  :from 250  :to 500 }
-                                                           {:key "500"  :from 500  :to 2500 }
-                                                           {:key "2500" :from 2500 }] }}
-                                         :no-col-data {:missing {:field "employee_count"}}}
-
-                              :metric-path [:companies :metric]
-                              :metric-aggs {:companies
-                                            {:reverse_nested {}
-                                             :aggs
-                                             {:metric {:value_count {:field "?natural_id"}}}}}
-                              }
-                      :view {:rows [{:key "latest" :label "latest reported"}]
-                             :cols [{:key "l"    :label "1-4"}
-                                    {:key "5"    :label "5-9"}
-                                    {:key "10"   :label "10-19"}
-                                    {:key "20"   :label "20-49"}
-                                    {:key "50"   :label "50-99"}
-                                    {:key "100"  :label "100-249"}
-                                    {:key "250"  :label "250-499"}
-                                    {:key "500"  :label "500-2499"}
-                                    {:key "2500" :label "2500 or more"}]
-                             :color "#28828a"
-                             :render-fn (fn [v] (num/fnum v))}
-                      :table-data nil}
 
    :view :trends
 
@@ -620,8 +496,8 @@
 
 
 (def components
-  [
-   {:name :filter
+
+  [{:name :filter
     :f filter/filter-component
     :target "filter-component"
     :paths {:filter-spec [:dynamic-filter-spec]}}
@@ -684,123 +560,18 @@
     :target "display-principal-name-component"
     :path [:map :controls :location :marker-opts]}
 
-   ;; {:name :region-investment-histogram
-   ;;  :f tag-histogram/tag-histogram
-   ;;  :target "city-barchart-component"
-   ;;  :paths {:tag-histogram [:city-barchart]
-   ;;          :filter-spec [:dynamic-filter-spec :composed :all]}}
-
-   {:name :sector-histogram-var-select
-    :f (partial
-        select-chooser/select-chooser-component
-        "Variable"
-        [{:value "!latest_turnover" :label "Total latest turnover (UK-wide) (£)"}
-         {:value "!latest_employee_count" :label "Total latest employees (UK-wide)"}
-         {:value "?counter" :label "Number of companies"}]
-        (fn
-          ([cursor] (get-in cursor [:query :stats-attr]))
-          ([cursor record]
-           (om/update! cursor [:query :stats-attr] (:value record))
-           (om/update! cursor [:metrics 0 :title] (:label record)))))
-    :target "sector-histogram-var-select-component"
-    :path [:sector-histogram]}
-
-   {:name :sector-histogram
-    :f tag-histogram/tag-histogram
-    :target "sector-histogram-component"
-    :paths {:tag-histogram [:sector-histogram]
-            :filter-spec [:dynamic-filter-spec :composed :all]}}
-
    {:name :table
-    :f table/table-component
+    :f table/multi-table-component
     :target "table-component"
     :paths {:table-state [:table]
             :filter-spec [:dynamic-filter-spec :composed :all]}}
-
-   {:name :trends-timeline
-    :f timeline-chart/timeline-chart
-    :target "trends-timeline-component"
-    :paths {:timeline-chart [:trends-timeline]
-            :filter-spec [:dynamic-filter-spec :composed :all]}}
-
-   {:name :trends-timeline-var-select
-    :f (partial
-        select-chooser/select-chooser-component
-        "Variable"
-        [{:value :!turnover :label "Turnover (UK-wide) (£)"}
-         {:value :!employee_count :label "Employees (UK-wide)"}]
-        (fn
-          ([cursor] (get-in cursor [:query :metrics :variable]))
-          ([cursor record]
-           (om/update! cursor [:query :metrics :variable] (:value record))
-           (om/update! cursor [:query :metrics :title] (:label record))
-           )))
-    :target "trends-timeline-var-select-component"
-    :path [:trends-timeline]}
-
-   ;; {:name :employment-timeline
-   ;;  :f timeline-chart/timeline-chart
-   ;;  :target "employment-timeline"
-   ;;  :paths {:timeline-chart [:employment-timeline]
-   ;;          :filter-spec [:dynamic-filter-spec :composed :all]}}
-
-   ;; {:name :formation-timeline
-   ;;  :f timeline-chart/timeline-chart
-   ;;  :target "formation-timeline"
-   ;;  :paths {:timeline-chart [:formation-timeline]
-   ;;          :filter-spec [:dynamic-filter-spec :composed :all]}}
-
-   ;; {:name :geo-sponsors
-   ;;  :f geo-sponsors/geo-sponsors-component
-   ;;  :target "geo-sponsors"
-   ;;  :paths {:bounds [:map :controls :bounds]
-   ;;          :geo-sponsors [:geo-sponsors]}}
-
-   ;; {:name :revenue-bands-var-select
-   ;;  :f (partial select-chooser/select-chooser-component "Variable" :field [[:turnover "Turnover (£)"][:employee_count "Employment"]])
-   ;;  :target "revenue-bands-var-select-component"
-   ;;  :path [:revenue-bands-table :controls :col-aggs :col :range]}
-
-   {:name :revenue-bands-chart
-    :f ranges-chart/ranges-chart-component
-    :target "revenue-bands-chart-component"
-    :paths {:table-state [:revenue-bands]
-            :filter-spec [:dynamic-filter-spec :composed :all]}}
-
-   {:name :employment-bands-chart
-    :f ranges-chart/ranges-chart-component
-    :target "employment-bands-chart-component"
-    :paths {:table-state [:employment-bands]
-            :filter-spec [:dynamic-filter-spec :composed :all]}}
-
-   ;; {:name :company-turnover-timeline
-   ;;  :f timeline-chart/timeline-chart
-   ;;  :target "company-turnover-timeline"
-   ;;  :paths {:timeline-chart [:company-turnover-timeline]
-   ;;          :filter-spec [:selection-filter-spec :composed :all]}}
-
-   ;; {:name :company-employment-timeline
-   ;;  :f timeline-chart/timeline-chart
-   ;;  :target "company-employment-timeline"
-   ;;  :paths {:timeline-chart [:company-employment-timeline]
-   ;;          :filter-spec [:selection-filter-spec :composed :all]}}
-
+   #_
    {:name :company-name
     :f text/text-component
     :target "company-name-component"
     :paths {:source [:company-info :record]
             :controls [:company-name]}}
-
-   {:name :company-info
-    :f company-info/company-info-component
-    :target "company-info-component"
-    :paths {:metadata [:company-info]
-            :turnover-timeline [:company-turnover-timeline]
-            :employment-timeline [:company-employment-timeline]
-            :filter-spec [:selection-filter-spec :composed :all]}}
-
-   ]
-  )
+   ])
 
 ;;;;;;;;;;;;;;;;;;;;;;;; load and index boundarylines
 
@@ -825,7 +596,8 @@
         {:fetch-boundarylines-fn (partial bl/get-or-fetch-best-boundarylines (app/get-state app) :boundarylines)
          :get-cached-boundaryline-fn (partial bl/get-cached-boundaryline (app/get-state app) :boundarylines)
          :point-in-boundarylines-fn (partial bl/point-in-boundarylines (app/get-state app) :boundarylines :uk_boroughs)
-         :path-marker-click-fn make-boundaryline-selection})
+         :path-marker-click-fn make-boundaryline-selection
+         :table-chan (chan)})
 
       (destroy [this app]
         (.log js/console "DESTROY APP!"))
