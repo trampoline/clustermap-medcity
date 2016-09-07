@@ -12,7 +12,7 @@
                  [org.clojure/test.check "0.9.0" :scope "test"]
 
                  [org.clojure/clojure "1.9.0-alpha10"]
-                 [org.clojure/clojurescript "1.9.227"]
+                 [org.clojure/clojurescript "1.9.229"]
                  [org.clojure/core.async "0.2.385"]
                  [com.taoensso/timbre "4.7.4"]
                  [org.omcljs/om "1.0.0-alpha41"]
