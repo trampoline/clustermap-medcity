@@ -4,6 +4,7 @@
   (:require
    [clojure.string :as str]
    [om.core :as om :include-macros true]
+   [devtools.core :as devtools]
    [clustermap.api :as api]
    [clustermap.app :as app]
    [clustermap.filters :as filters]
@@ -38,6 +39,8 @@
 
 ;; assume we are in dev-mode if there is repl support
 (def ^:private dev-mode (some-> js/window .-config .-repl))
+(when ^boolean js/goog.DEBUG
+  (devtools/install! :all))
 
 ;; the IApp object
 (def ^:private app-instance (atom nil))
@@ -261,7 +264,7 @@
                                :location-attr "!location"
                                :attrs ["?natural_id" "!name" "!location" "!latest_employee_count" "!latest_turnover" "!total_funding"]
                                :sort-spec [{"!latest_turnover" "desc"}{"!latest_employment" "desc"}]
-                               :marker-opts {:display-turnover true
+                               :marker-opts {:display-turnover false
                                              :display-employee-count false
                                              :display-principal-name false}
 
@@ -837,18 +840,5 @@
   (app/start-or-restart-app app-instance initial-state components (create-app-service)))
 
 (cond
-
-  ;; dev mode : configure repl and figwheel code-reloading
-  ;; js/config.repl
-  ;; (do
-  ;;   (ws-repl/connect "ws://localhost:9001" :verbose true)
-  ;;   (fw/watch-and-reload
-  ;;    :websocket-url "ws://localhost:3449/figwheel-ws"
-  ;;    :jsload-callback (fn []
-  ;;                       (init)
-  ;;                       (.log js/console "restarted")))
-  ;;   (init))
-
-  ;; production : just run the app
   true
   (do (js/console.debug "first init") (init)))
