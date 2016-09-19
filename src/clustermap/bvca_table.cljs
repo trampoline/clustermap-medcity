@@ -58,6 +58,23 @@
     (inspect (-> state :table :tables :investors-table))
     (-> state
         (assoc-in [:table :current-table] :investors-table)
+
+        (update-in [:dynamic-filter-spec]
+                   merge {:components dyn-components :composed dyn-composed}))))
+
+
+(defn make-constituency-selection
+  [investor-id state]
+  (let [;;state (update state :dynamic-filter-spec filters/reset-filter)
+
+        dyn-components   (get-in state [:dynamic-filter-spec :components])
+        dyn-components   (assoc-in dyn-components [:whatever-natural-id] {:term {"?boundaryline_id" investor-id}})
+        dyn-base-filters (get-in state [:selection-filter-spec :base-filters])
+        dyn-composed     (filters/compose-filters dyn-components dyn-base-filters)
+        ]
+    (inspect (-> state :table :tables :investors-table))
+    (-> state
+        (assoc-in [:table :current-table] :constituencies-table)
         (update-in [:dynamic-filter-spec]
                    merge {:components dyn-components :composed dyn-composed}))))
 

@@ -3,6 +3,7 @@
                    [cljs.core.async.macros :refer [go]])
   (:require
    [clojure.string :as str]
+   [clojure.spec :as sp]
    [om.core :as om :include-macros true]
    [devtools.core :as devtools]
    [clustermap.api :as api]
@@ -32,7 +33,7 @@
    [clustermap.components.action-button :as action-button]
    [clustermap.components.action-link :as action-link]
    [clustermap.boundarylines :as bl]
-   [clustermap.util :refer [inspect]]
+   [clustermap.util :as util :refer [inspect]]
    [clustermap.component-specs :as component-specs]
    [clustermap.bvca-table :as bvca-table]
    [cljs.core.async :refer [chan <! put! sliding-buffer >!]]
@@ -95,16 +96,48 @@
                   #_(app/navigate @app-instance "company-sites"))}
    name])
 
+(sp/def ::investor_company_uid string?)
+(sp/def ::?investor_company_uid ::investor_company_uid )
+(sp/def ::investment-record (sp/keys :req-un [(or ::investor_company_uid ::?investor_company_uid)
+                                              ::?boundaryline_id]))
+(sp/def ::constituency-link-record (sp/keys :req-un [::?boundaryline_id]))
+(sp/def ::investor-link-record (sp/keys :req-un [(or ::investor_company_uid ::?investor_company_uid)]))
+
 (defn investor-link-render-fn
   [name record]
+  (util/assert-spec ::investor-link-record record)
   [:a {:href "#"
        :target "_blank"
        :onClick (fn [e]
                   (.preventDefault e)
                   (inspect "clicked investor" record)
                   (swap! (get-app-state-atom)
-                         (partial bvca-table/make-investor-selection (:investor_company_uid record)))
+                         (partial bvca-table/make-investor-selection (or (:investor_company_uid record)
+                                                                         (:?investor_company_uid record))))
                   (inspect "maked investor")
+                  #_(app/navigate @app-instance "company-sites"))}
+   name])
+
+(defn investor-links-render-fn [links _]
+  (-> (map #(investor-link-render-fn (:name %) %) links)
+      (interleave (repeat ", "))
+      drop-last))
+
+(defn constituency-link-render-fn
+  [name record]
+  (util/assert-spec ::constituency-link-record record)
+  [:a {:href "#"
+       :target "_blank"
+       :onClick (fn [e]
+                  (.preventDefault e)
+                  (inspect "clicked constituency" record)
+                  ;; (util/assert-spec string? (:investor_company_uid record))
+                  (swap! (get-app-state-atom) update :dynamic-filter-spec filters/reset-filter)
+                  (make-boundaryline-selection (:?boundaryline_id record))
+                  (swap! (get-app-state-atom)
+                         (partial bvca-table/make-constituency-selection (:?boundaryline_id record)))
+
+                  ;; (inspect (make-boundaryline-selection (:?boundaryline_id record)))
                   #_(app/navigate @app-instance "company-sites"))}
    name])
 
@@ -396,9 +429,13 @@
 
                                                             {:key :!name :sortable false :label "Investor-backed company" :render-fn company-link-render-fn}
                                                             {:key :?investor_companies :sortable false :label "Investor"
-                                                             :render-fn (fn [n r]
-                                                                          (for [rec n] (investor-link-render-fn (:name rec) rec)))}
-                                                            {:key :fixme :sortable false :label "Constituency" :render-fn company-link-render-fn}
+                                                             :render-fn investor-links-render-fn}
+                                                            {:key :?tags :sortable false :label "Constituency"
+                                                             :render-fn (fn [tags rec]
+                                                                          (when-let [r (-> (filter #(= "uk_constituencies" (:type %)) tags)
+                                                                                           first)]
+                                                                            (constituency-link-render-fn (:description r)
+                                                                                                         {:?boundaryline_id (:tag r)}))) }
                                                             {:key :!latest_turnover
                                                              :sortable true
                                                              :label (fn [] [:div "Latest turnover\u0020" [:small "(UK-wide)"]])
@@ -409,8 +446,7 @@
                                                              :sortable true
                                                              :label (fn [] [:div "Latest employees\u0020" [:small "(UK-wide)"]])
                                                              :right-align true
-                                                             :render-fn #(num/mixed %)}
-                                                            ]}
+                                                             :render-fn #(num/mixed %)}]}
                                        :table-data nil}
 
                      :sites-table {:type :table
@@ -425,8 +461,11 @@
 
                                                         {:key :?investor_companies :sortable false
                                                          :label "Investor"
-                                                         :render-fn (fn [n r]
-                                                                      (for [rec n] (investor-link-render-fn (:name rec) rec)))}
+                                                         :render-fn investor-links-render-fn}
+                                                        {:key :?boundaryline_compact_name
+                                                         :sortable false :label "Constituency"
+                                                         }
+
                                                         {:key :!latest_turnover
                                                          :sortable true
                                                          :label (fn [] [:div "Latest turnover\u0020" [:small "(UK-wide)"]])
@@ -444,13 +483,16 @@
                                                   :index-type "investment"
                                                   :title "Investor"
                                                   :sort-spec {:!company_name {:order "desc"}}
-                                                  :fields [:?investment_uid :!company_name :?company_site_postcode :?investor_company_name]
+                                                  :fields [:?investment_uid :!company_name :?company_site_postcode :?investor_company_name :?company_no :?natural_id :!latest_turnover :!latest_employee_count :?boundaryline_compact_name :?boundaryline_id]
                                                   :from 0
                                                   :size 50
                                                   :columns [
                                                             {:key :!company_name :sortable false :label "Investor-backed company" :render-fn company-link-render-fn}
                                                             {:key :?investor_company_name :sortable false :label "Investor"}
-                                                            {:key :?postcode :sortable false :label "Constituency"}
+                                                            {:key :?boundaryline_compact_name
+                                                             :sortable false
+                                                             :label "Constituency"
+                                                             :render-fn constituency-link-render-fn}
                                                             {:key :!latest_turnover
                                                              :sortable true
                                                              :label (fn [] [:div "Latest turnover\u0020" [:small "(UK-wide)"]])
@@ -461,7 +503,52 @@
                                                              :label (fn [] [:div "Latest employees\u0020" [:small "(UK-wide)"]])
                                                              :right-align true
                                                              :render-fn #(num/mixed %)}]}
-                                       :table-data nil}}}
+                                       :table-data nil}
+
+                     :constituencies-table {:type :table
+                                            :controls {:index "investments"
+                                                       :index-type "investment"
+                                                       :title "Constituency"
+                                                       :sort-spec {:!company_name {:order "desc"}}
+                                                       :fields [:?investment_uid :!company_name :?company_site_postcode
+                                                                :?company_site_purpose
+                                                                :?investor_company_name :?investor_company_uid
+                                                                :?company_no :?natural_id :!latest_turnover :!latest_employee_count
+                                                                :?company_investment_count
+
+                                                                :?boundaryline_compact_name]
+                                                       :from 0
+                                                       :size 50
+                                                       :columns [
+                                                                 {:key :!company_name :sortable false :label "Investor-backed company" :render-fn company-link-render-fn}
+                                                                 {:key :?investor_company_name
+                                                                  :sortable false
+                                                                  :render-fn (fn [n rec]
+                                                                               (investor-link-render-fn n rec))
+                                                                  :label "Investor"}
+                                                                 {:key :?company_site_purpose
+                                                                  :sortable false
+                                                                  :render-fn (fn [n rec]
+                                                                               (case n
+                                                                                 "hq" "Portfolio company"
+                                                                                 "branch" "Branch"
+                                                                                 ""))
+                                                                  :label "Site Type"}
+                                                                 {:key :?boundaryline_compact_name
+                                                                  :sortable false
+                                                                  :label "Constituency"
+                                                                  }
+                                                                 {:key :!latest_turnover
+                                                                  :sortable true
+                                                                  :label (fn [] [:div "Latest turnover\u0020" [:small "(UK-wide)"]])
+                                                                  :right-align true
+                                                                  :render-fn #(num/mixed % {:curr "£"})}
+                                                                 {:key :!latest_employee_count
+                                                                  :sortable true
+                                                                  :label (fn [] [:div "Latest employees\u0020" [:small "(UK-wide)"]])
+                                                                  :right-align true
+                                                                  :render-fn #(num/mixed %)}]}
+                                            :table-data nil}}}
 
    :geo-sponsors {:controls {:max-count 1}
                   :data nil}
