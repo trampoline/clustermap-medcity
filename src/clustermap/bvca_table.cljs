@@ -36,6 +36,7 @@
                  ;; (assoc-in [:table :tables :sites-table :controls :natural-id] natural-id)
                  #_(update-in [:selection-filter-spec]
                               merge {:components components :composed composed})
+                 (assoc-in [:headline-stats :controls :current-mode] :company)
                  (update-in [:dynamic-filter-spec]
                             merge {:components dyn-components :composed dyn-composed})))))
 
@@ -58,6 +59,7 @@
     (inspect (-> state :table :tables :investors-table))
     (-> state
         (assoc-in [:table :current-table] :investors-table)
+        (assoc-in [:headline-stats :controls :current-mode] :investor)
 
         (update-in [:dynamic-filter-spec]
                    merge {:components dyn-components :composed dyn-composed}))))
@@ -75,6 +77,7 @@
     (inspect (-> state :table :tables :investors-table))
     (-> state
         (assoc-in [:table :current-table] :constituencies-table)
+        (assoc-in [:headline-stats :controls :current-mode] :constituency)
         (update-in [:dynamic-filter-spec]
                    merge {:components dyn-components :composed dyn-composed}))))
 

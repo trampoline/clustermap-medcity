@@ -684,7 +684,8 @@
          :get-cached-boundaryline-fn (partial bl/get-cached-boundaryline (app/get-state app) :boundarylines)
          :point-in-boundarylines-fn (partial bl/point-in-boundarylines (app/get-state app) :boundarylines :uk_boroughs)
          :path-marker-click-fn make-boundaryline-selection
-         :table-chan (chan)})
+         :table-chan (chan)
+         :stats-chan (chan)})
 
       (destroy [this app]
         (.log js/console "DESTROY APP!"))
