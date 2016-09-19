@@ -50,20 +50,6 @@
            {:value "nuts_1__UKE" :label "Yorkshire and the Humber"}
            {:value "nuts_1__UKJ" :label "South East"}
            {:value "nuts_1__UKK" :label "South West"}]}
-   #_
-   {:id :sector
-    :type :tag-checkboxes
-    :label "Sector"
-    :sorted true
-    :visible true
-    :controls true
-    :tag-type "l4_sector"
-    :tags [
-           {:value "pharm_manf" :label "Pharmaceutical manufacture"}
-           {:value "med_opt_equip_manf" :label "Medical (exc. pharmaceutical) & optical equipment manufacture"}
-           {:value "biotech_randd" :label "Biotechnology research and development"}
-           {:value "healthcare" :label "Healthcare"}
-           ]}
 
    {:id :sector
     :type :checkboxes
@@ -74,124 +60,134 @@
     :options [;; {:value "any" :label "Any" :filter nil :omit-description true}
               #_{:value "any" :label "Has SIC"
                  :filter {:range {"!sic07" {:gte ""}}}}
-              {:value "sectionA" :label "Agriculture, forestry & fishing"
-               :filter {:range {"!sic07" {:gte "01110" :lt "05101"}}}}
-              {:value "sectionB" :label "Mining & quarrying"
-               :filter {:range {"!sic07" {:gte "05101" :lt "10110"}}}}
-              {:value "sectionC" :label "Manufacturing"
-               :filter {:range {"!sic07" {:gte "10110" :lt "35110"}}}}
-              {:value "sectionD" :label "Electricity, gas & air conditioning"
-               :filter {:range {"!sic07" {:gte "35110" :lt "36000"}}}}
-              {:value "sectionE" :label "Water, sewage & waste"
-               :filter {:range {"!sic07" {:gte "36000" :lt "41100"}}}}
-              {:value "sectionF" :label "Construction"
-               :filter {:range {"!sic07" {:gte "41100" :lt "45111"}}}}
-              {:value "sectionG" :label "Wholesale, retail & automative repair	"
-               :filter {:range {"!sic07" {:gte "45111" :lt "49100"}}}}
-              {:value "sectionH" :label "Transportation and storage"
-               :filter {:range {"!sic07" {:gte "49100" :lt "55100"}}}}
-              {:value "sectionI" :label "Accommodation, food & drink"
-               :filter {:range {"!sic07" {:gte "55100" :lt "58110"}}}}
-              #_{:value "sectionJ" :label "Information and communication"
-                 :filter {:range {"!sic07" {:gte "58110" :lt "64110"}}}}
-              {:value "sectionJ1" :label "Publishing & Broadcasting"
-               :filter {:range {"!sic07" {:gte "58110" :lt "61100"}}}}
-              {:value "sectionJ2" :label "Telecommunications"
-               :filter {:range {"!sic07" {:gte "61100" :lt "62000"}}}}
-              {:value "sectionJ3" :label "IT: Software development"
-               :filter {:range {"!sic07" {:gte "62000" :lt "63120"}}}}
-              {:value "sectionJ4" :label "IT: Web & information services"
-               :filter {:range {"!sic07" {:gte "63120" :lt "64000"}}}}
-              {:value "sectionK" :label "Financial & insurance"
-               :filter {:range {"!sic07" {:gte "64110" :lt "68100" }}}}
-              {:value "sectionL" :label "Real estate"
-               :filter {:range {"!sic07" {:gte "68100" :lt "69101"}}}}
-              {:value "sectionM" :label "Scientific & technical services"
-               :filter {:range {"!sic07" {:gte "69101" :lt "77110"}}}}
-              {:value "sectionN" :label "Administrative & support services"
-               :filter {:range {"!sic07" {:gte "77110" :lt "84110"}}}}
-              {:value "sectionO" :label "Government & defence"
-               :filter {:range {"!sic07" {:gte "84110" :lt "85100"}}}}
-              {:value "sectionP" :label "Education"
-               :filter {:range {"!sic07" {:gte "85100" :lt "86101"}}}}
-              {:value "sectionQ" :label "Health & social work"
-               :filter {:range {"!sic07" {:gte "86101" :lt "90010"}}}}
-              {:value "sectionR" :label "Arts & entertainment"
-               :filter {:range {"!sic07" {:gte "90010" :lt "94110"}}}}
-              {:value "sectionS" :label "Other services"
-               :filter {:range {"!sic07" {:gte "94110" :lt "97000"}}}}
-              {:value "sectionT" :label "Household activities"
-               :filter {:range {"!sic07" {:gte "97000" :lt "99000" }}}}
-              {:value "sectionU" :label "International organisations"
-               :filter {:range {"!sic07" {:gte "99000"}}}}
+              {:value "sectionA" :label "Basic Materials - Chemicals"
+               :filter {:bool {:should {:term {"!sic07" "2740a78ea9b47720c082"}}}}}
+              {:value "sectionB" :label "Basic Materials - Forestry & Paper"
+               :filter {:bool {:should {:term {"!sic07" "a6797d45795f0df54dbf"}}}}}
+              {:value "sectionC" :label "Basic Materials - Industrial Metals & Mining"
+               :filter {:bool {:should {:term {"!sic07" "1f784fd66e16e14866d4"}}}}}
+              {:value "sectionD" :label "Basic Materials - Mining"
+               :filter {:bool {:should {:term {"!sic07" "7fe3d9f3a3acb0e31711"}}}}}
+              {:value "f20dffe25ed1413d3251" :label "Consumer Goods - Automobiles & Parts"
+               :filter {:bool {:should {:term {"!sic07" "f20dffe25ed1413d3251"}}}}}
+              {:value "497b5d8bd135811cbfcf" :label "Consumer Goods - Beverages"
+               :filter {:bool {:should {:term {"!sic07" "497b5d8bd135811cbfcf"}}}}}
+              {:value "d7bc4e5c3b8bcd8cb954" :label "Consumer Goods - Food Producers"
+               :filter {:bool {:should {:term {"!sic07" "d7bc4e5c3b8bcd8cb954"}}}}}
+              {:value "73577d127d8ac504f328" :label "Consumer Goods - Household Goods & Home Construction"
+               :filter {:bool {:should {:term {"!sic07" "73577d127d8ac504f328"}}}}}
+              {:value "0035d9338adcd4d206e7" :label "Consumer Goods - Leisure Goods"
+               :filter {:bool {:should {:term {"!sic07" "0035d9338adcd4d206e7"}}}}}
+              {:value "2f2c3fc1ce65b43416d4" :label "Consumer Goods - Personal Goods"
+               :filter {:bool {:should {:term {"!sic07" "2f2c3fc1ce65b43416d4"}}}}}
+              {:value "ed9ba3c0e6bc6e0a4ed8" :label "Consumer Services - Consultancy"
+               :filter {:bool {:should {:term {"!sic07" "ed9ba3c0e6bc6e0a4ed8"}}}}}
+              {:value "98fef0f7d4cdc02d0869" :label "Consumer Services - Food & Drug Retailers"
+               :filter {:bool {:should {:term {"!sic07" "98fef0f7d4cdc02d0869"}}}}}
+              {:value "f4b78af0a12ad417e462" :label "Consumer Services - General Retailers"
+               :filter {:bool {:should {:term {"!sic07" "f4b78af0a12ad417e462"}}}}}
+              {:value "fe56c0ef4b4758bd2585" :label "Consumer Services - Media"
+               :filter {:bool {:should {:term {"!sic07" "fe56c0ef4b4758bd2585"}}}}}
+              {:value "44fdddb6e762fd9b592f" :label "Consumer Services - Other"
+               :filter {:bool {:should {:term {"!sic07" "44fdddb6e762fd9b592f"}}}}}
+              {:value "4b9c26ac70ef8eb91e9e" :label "Consumer Services - Real Estate"
+               :filter {:bool {:should {:term {"!sic07" "4b9c26ac70ef8eb91e9e"}}}}}
+              {:value "c911bc2bca07165b8185" :label "Consumer Services - Travel & Leisure"
+               :filter {:bool {:should {:term {"!sic07" "c911bc2bca07165b8185"}}}}}
+              {:value "681245bb9031605662f3" :label "Energy - Alternative Energy"
+               :filter {:bool {:should {:term {"!sic07" "681245bb9031605662f3"}}}}}
+              {:value "3a9612bd0734ed35dbcd" :label "Energy - Energy Equipment, Services & Distribution"
+               :filter {:bool {:should {:term {"!sic07" "3a9612bd0734ed35dbcd"}}}}}
+              {:value "140668b1b46db56df601" :label "Energy - Equipment, Services & Distribution"
+               :filter {:bool {:should {:term {"!sic07" "140668b1b46db56df601"}}}}}
+              {:value "2c4ebd9b6ffad4499a72" :label "Energy - Oil & Gas Producers"
+               :filter {:bool {:should {:term {"!sic07" "2c4ebd9b6ffad4499a72"}}}}}
+              {:value "b88ff8c33affc4c8ca34" :label "Energy - Oil Equipment, Services & Distribution"
+               :filter {:bool {:should {:term {"!sic07" "b88ff8c33affc4c8ca34"}}}}}
+              {:value "6dc1c2c43eb8cfc1e0c0" :label "Energy- Alternative Energy"
+               :filter {:bool {:should {:term {"!sic07" "6dc1c2c43eb8cfc1e0c0"}}}}}
+              {:value "28eba22288b902df820c" :label "Financials - Banks"
+               :filter {:bool {:should {:term {"!sic07" "28eba22288b902df820c"}}}}}
+              {:value "147a4069e393256381c4" :label "Financials - Equity Investment Instruments"
+               :filter {:bool {:should {:term {"!sic07" "147a4069e393256381c4"}}}}}
+              {:value "02cbabdaead919d796bc" :label "Financials - Financial Services"
+               :filter {:bool {:should {:term {"!sic07" "02cbabdaead919d796bc"}}}}}
+              {:value "83ba842137293e09a414" :label "Financials - Life Insurance"
+               :filter {:bool {:should {:term {"!sic07" "83ba842137293e09a414"}}}}}
+              {:value "46dc32ea0524280a188c" :label "Financials - Non-Life Insurance"
+               :filter {:bool {:should {:term {"!sic07" "46dc32ea0524280a188c"}}}}}
+              {:value "d34ef9547ef6ce9cad0a" :label "Financials - Non-equity Investment Instruments"
+               :filter {:bool {:should {:term {"!sic07" "d34ef9547ef6ce9cad0a"}}}}}
+              {:value "d811d2038cc0ededca2a" :label "Financials - Real Estate Investment & Services"
+               :filter {:bool {:should {:term {"!sic07" "d811d2038cc0ededca2a"}}}}}
+              {:value "9733569679db2c1c0da8" :label "Financials - Real Estate Investment Trusts"
+               :filter {:bool {:should {:term {"!sic07" "9733569679db2c1c0da8"}}}}}
+              {:value "3b520aa16732d85a624e" :label "Health Care - Equipment & Services"
+               :filter {:bool {:should {:term {"!sic07" "3b520aa16732d85a624e"}}}}}
+              {:value "f170694ab2e4ec8c2c05" :label "Health Care - Pharmaceuticals & Biotechnology"
+               :filter {:bool {:should {:term {"!sic07" "f170694ab2e4ec8c2c05"}}}}}
+              {:value "4ba8830c8598aaeb72dd" :label "Industrials - Aerospace & Defense"
+               :filter {:bool {:should {:term {"!sic07" "4ba8830c8598aaeb72dd"}}}}}
+              {:value "e93d3e01f9ccfa5ad246" :label "Industrials - Construction & Materials"
+               :filter {:bool {:should {:term {"!sic07" "e93d3e01f9ccfa5ad246"}}}}}
+              {:value "d025a3f77e369996b442" :label "Industrials - Electronic & Electrical Equipment"
+               :filter {:bool {:should {:term {"!sic07" "d025a3f77e369996b442"}}}}}
+              {:value "99b361342ef25389ad3f" :label "Industrials - Engineering"
+               :filter {:bool {:should {:term {"!sic07" "99b361342ef25389ad3f"}}}}}
+              {:value "079587cb79567cdec643" :label "Industrials - General Industrials"
+               :filter {:bool {:should {:term {"!sic07" "079587cb79567cdec643"}}}}}
+              {:value "7864ed9e22505a433e4b" :label "Industrials - Support Services"
+               :filter {:bool {:should {:term {"!sic07" "7864ed9e22505a433e4b"}}}}}
+              {:value "c21772f16a38bdc6ff5e" :label "Industrials - Transportation"
+               :filter {:bool {:should {:term {"!sic07" "c21772f16a38bdc6ff5e"}}}}}
+              {:value "c5f72db94deebda39f42" :label "Industry Sectors"
+               :filter {:bool {:should {:term {"!sic07" "c5f72db94deebda39f42"}}}}}
+              {:value "4df616dabec9dc54d85d" :label "Oil & Gas - Oil Equipment, Services & Distribution"
+               :filter {:bool {:should {:term {"!sic07" "4df616dabec9dc54d85d"}}}}}
+              {:value "cd4f67c76eec685d55c0" :label "Other - Education Services"
+               :filter {:bool {:should {:term {"!sic07" "cd4f67c76eec685d55c0"}}}}}
+              {:value "90b092ede5bdcabbd018" :label "Technology - Hardware & Equipment"
+               :filter {:bool {:should {:term {"!sic07" "90b092ede5bdcabbd018"}}}}}
+              {:value "b4d37bf2372a15609474" :label "Technology - Software & Computer Services"
+               :filter {:bool {:should {:term {"!sic07" "b4d37bf2372a15609474"}}}}}
+              {:value "a052c16efb40ca8000d8" :label "Telecommunications - Fixed Line"
+               :filter {:bool {:should {:term {"!sic07" "a052c16efb40ca8000d8"}}}}}
+              {:value "7033499c23d50ef8c303" :label "Telecommunications - Mobile"
+               :filter {:bool {:should {:term {"!sic07" "7033499c23d50ef8c303"}}}}}
+              {:value "e8e450be96f495d7751f" :label "Utilities - Electricity"
+               :filter {:bool {:should {:term {"!sic07" "e8e450be96f495d7751f"}}}}}
+              {:value "5b50bce1e14583d44d44" :label "Utilities - Gas, Water & Multiutilities"
+               :filter {:bool {:should {:term {"!sic07" "5b50bce1e14583d44d44"}}}}}
               ]}
 
-   {:id :highgrowth
+   {:id :latest-turnover
     :type :checkboxes
-    :label "High growth"
+    :label "Turnover"
     :visible true
-    :options [{:value "latest" :label "High growth companies" :filter scaleup-filter}
+    :controls true
+    :options [;; {:value "any" :label "Any" :filter nil}
+              {:value "min" :label "Less than £50,000" :filter {:range {"!latest_turnover" {:lt 50000}}}}
+              {:value "low" :label "£50 – 100,000" :filter {:range {"!latest_turnover" {:gte 50000 :lt 100000}}}}
+              {:value "lowmid" :label "£100 – 250,000" :filter {:range {"!latest_turnover" {:gte 100000 :lt 250000}}}}
+              {:value "mid" :label "£250 – 500,000" :filter {:range {"!latest_turnover" {:gte 250000 :lt 500000}}}}
+              {:value "highmid" :label "£500 – £1 million" :filter {:range {"!latest_turnover" {:gte 500000 :lt 1000000}}}}
+              {:value "higher" :label "£1 – 5 million" :filter {:range {"!latest_turnover" {:gte 1000000 :lt 5000000}}}}
+              {:value "highest" :label "More than £5 million" :filter {:range {"!latest_turnover" {:gte 5000000}}}}
               ]}
 
-   {:id :segments
-    :type :tag-checkboxes
-    :label "Segments"
-    :sorted true
-    :visible false
+   {:id :employee-count
+    :type :checkboxes
+    :label "Employees"
+    :visible true
     :controls true
-    :tag-type "bis_l1p1_sector"
-    :tags [{:value "IBA" :label "Bio fuels"}
-           {:value "IBB" :label "Environmental"}
-           {:value "IBC" :label "Food/Drink"}
-           {:value "IBD" :label "Commodity Chemicals"}
-           {:value "IBE" :label "Fine & Speciality Chemicals"}
-           {:value "IBF" :label "Pharmaceutical Intermediaries"}
-           {:value "IBG" :label "Personal Care/ Cosmetics"}
-           {:value "IBH" :label "Specialist Services"}
-           {:value "IBI" :label "Agro-Industry"}
-           {:value "IBX" :label "Specialist Services"}
-           {:value "MBA" :label "Antibodies"}
-           {:value "MBB" :label "Therapeutic Proteins"}
-           {:value "MBC" :label "Advanced Therapy Medicinal Products (ATMPs)"}
-           {:value "MBD" :label "Vaccines"}
-           {:value "MBE" :label "Small Molecules"}
-           {:value "MBF" :label "Blood & Tissue Products"}
-           {:value "MBG" :label "Specialist Services"}
-           {:value "MBX" :label "Specialist Suppliers/Supply Chain"}
-           {:value "MBZ" :label "Medical Biotechnology - Unclassified "}
-           {:value "MTA" :label "Wound Care and Management "}
-           {:value "MTB" :label "In vitro diagnostic technology"}
-           {:value "MTC" :label "Radiotherapy equipment"}
-           {:value "MTD" :label "Medical Imaging/Ultrasound Equipment and Materials"}
-           {:value "MTE" :label "Anaesthetic and respiratory technology"}
-           {:value "MTF" :label "Orthopaedic Devices"}
-           {:value "MTG" :label "Cardiovascular and vascular devices"}
-           {:value "MTH" :label "Neurology"}
-           {:value "MTI" :label "Ophthalmic Devices/Equipment"}
-           {:value "MTJ" :label "Dental and maxillofacial technology"}
-           {:value "MTK" :label "Drug Delivery"}
-           {:value "MTL" :label "Infection Control "}
-           {:value "MTM" :label "Surgical Instruments (reusable) n.e.c."}
-           {:value "MTN" :label "Single use technology n.e.c."}
-           {:value "MTO" :label "Re-usable diagnostic or analytic equipment n.e.c."}
-           {:value "MTP" :label "Implantable devices n.e.c."}
-           {:value "MTQ" :label "Assistive Technology"}
-           {:value "MTR" :label "Mobility Access"}
-           {:value "MTS" :label "Hospital hardware including ambulatory"}
-           {:value "MTT" :label "Digital Health"}
-           {:value "MTU" :label "Professional services, Consultancy"}
-           {:value "MTV" :label "Education and Training"}
-           {:value "MTX" :label "Specialist Suppliers/Supply Chain"}
-           {:value "MTZ" :label "Medical Technology - Unclassified "}
-           {:value "PHA" :label "Antibodies"}
-           {:value "PHB" :label "Therapeutic Proteins"}
-           {:value "PHC" :label "Advanced Therapy Medicinal Products (ATMPs)"}
-           {:value "PHD" :label "Vaccines"}
-           {:value "PHE" :label "Small Molecules"}
-           {:value "PHF" :label "Blood & Tissue Products"}
-           {:value "PHG" :label "Specialist Services"}
-           {:value "PHX" :label "Specialist Services"}
-           {:value "PHZ" :label "Pharmaceutical - Unclassified"}
-           {:value "no_data" :label "No data"}
-           ]}
+    :options [{:value "min" :label "1–4" :filter {:range {"!latest_employee_count" {:lte 4}}}}
+              {:value "min+" :label "5–9" :filter {:range {"!latest_employee_count" {:gt 4 :lte 9}}}}
+              {:value "min++" :label "10–19" :filter {:range {"!latest_employee_count" {:gt 9 :lte 19}}}}
+              {:value "min+++" :label "20–49" :filter {:range {"!latest_employee_count" {:gt 19 :lte 49}}}}
+              {:value "mid" :label "50–99" :filter {:range {"!latest_employee_count" {:gt 49 :lte 99}}}}
+              {:value "mid+" :label "100–249" :filter {:range {"!latest_employee_count" {:gt 99 :lte 249}}}}
+              {:value "mid++" :label "250–499" :filter {:range {"!latest_employee_count" {:gt 249 :lte 499}}}}
+              {:value "mid+++" :label "500–2499" :filter {:range {"!latest_employee_count" {:gt 499 :lte 2499}}}}
+              {:value "max" :label "2500 or more" :filter {:range {"!latest_employee_count" {:gt 2499}}}}]}
+
    ])
