@@ -180,7 +180,7 @@
                          ;; base-filters AND combined with dynamic components
                          }
 
-   :dynamic-filter-description-components [:boundaryline :uk_region :sector :highgrowth :segments ]
+   :dynamic-filter-description-components [:boundaryline :uk_region :sector :latest-turnover :employee-count]
 
    :selection-filter-spec {:id :selection-filter
                            :components {:natural_id nil}
@@ -231,7 +231,7 @@
          ;; :boundaryline-collections [[0 "nuts_2"] [8 "nuts_3"] [9 "uk_boroughs"] [11 "uk_wards"]]
          ;; :boundaryline-collections [[0 "nuts_2"] [8 "nuts_3"] [9 "nutsish_4"] [11 "nutsish_5"]]
          ;; :boundaryline-collections [[0 "uk_boroughs"] [10 "uk_wards"]]
-         :boundaryline-collections [[0 "nuts_1"][9 "uk_boroughs"][11 "uk_wards"]]
+         :boundaryline-collections [[0 "nuts_1"][9 "uk_constituencies"] #_[11 "uk_wards"]]
          :controls {:initial-bounds  [[58.7 5.3] [49.29 -11.29]]
                     :map-options {:zoomControl true
                                   :dragging true
