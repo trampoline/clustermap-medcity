@@ -13,13 +13,14 @@
 
                  [org.clojure/clojure "1.9.0-alpha10"]
                  [org.clojure/clojurescript "1.9.229"]
-                 [org.clojure/core.async "0.2.385"]
+                 [org.clojure/core.async "0.2.391"]
                  [com.taoensso/timbre "4.7.4"]
                  [org.omcljs/om "1.0.0-alpha41"]
-                 [binaryage/devtools "0.8.1"]
+                 [binaryage/devtools "0.8.2"]
                  [weasel "0.7.0" :scope "test"]
-                 [cljsjs/react "15.2.1-0"]
-                 [cljsjs/react-dom "15.2.1-0"]
+                 [cljsjs/react "15.3.1-0"]
+                 [cljsjs/react-dom "15.3.1-0"]
+                 [cljsjs/raven "3.5.1-0"]
 
                  [clustermap-components "0.2.0-SNAPSHOT"]
                  ])
@@ -46,6 +47,7 @@
 
 (deftask production []
   (task-options! cljs {:optimizations :advanced
+                       :compiler-options {:closure-defines {"goog.DEBUG" false}}
                        :source-map true})
   identity)
 
