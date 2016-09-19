@@ -8,36 +8,6 @@
             [clustermap.formats.number :as num :refer [div! *! -! +!]]
             [clustermap.formats.money :as money]))
 
-;; TODO: make pure
-(defn make-company-selection!
-  "Make selction to filter for just one company and its sites"
-  [natural-id state-atom]
-  (swap! state-atom update :dynamic-filter-spec filters/reset-filter)
-  (inspect @state-atom)
-  (let [components (get-in @state-atom [:selection-filter-spec :components])
-        components (assoc-in components [:natural-id] {:term {"?natural_id" natural-id}})
-
-        base-filters (get-in @state-atom [:selection-filter-spec :base-filters])
-        composed     (filters/compose-filters components base-filters)
-
-        dyn-components (get-in @state-atom [:dynamic-filter-spec :components])
-        dyn-components (assoc-in dyn-components [:natural-id] {:term {"?natural_id" natural-id}})
-
-        dyn-base-filters (get-in @state-atom [:selection-filter-spec :base-filters])
-        dyn-composed     (filters/compose-filters dyn-components dyn-base-filters)
-        ]
-    (inspect components base-filters (get-in @state-atom [:table :tables]))
-    (swap! state-atom
-           #(-> %
-                (assoc-in [:table :current-table] :sites-table)
-                (assoc-in [:table :tables :sites-table :controls :natural-id] natural-id)
-                (update-in [:selection-filter-spec] merge {:components components :composed composed})
-                (update-in [:dynamic-filter-spec] merge {:components dyn-components :composed dyn-composed })
-                ))
-    (inspect @state-atom)
-    ))
-
-
 (s/fdef make-company-selection
   :args (s/cat :id string? :state map?)
   :ret map?
@@ -59,7 +29,6 @@
         dyn-components   (assoc-in dyn-components [:whatever-natural-id] {:term {"?natural_id" natural-id}})
         dyn-base-filters (get-in state [:selection-filter-spec :base-filters])
         dyn-composed     (filters/compose-filters dyn-components dyn-base-filters)]
-    ;; (inspect components base-filters (get-in state [:table :tables]))
 
     (inspect (-> state
                  (assoc-in [:table :current-table] :sites-table)
@@ -69,17 +38,6 @@
                               merge {:components components :composed composed})
                  (update-in [:dynamic-filter-spec]
                             merge {:components dyn-components :composed dyn-composed})))))
-
-#_
-(defn company-link-render-fn
-  [name record]
-  [:a {:href "#"
-       :target "_blank"
-       :onClick (fn [e]
-                  (.preventDefault e)
-                  (make-company-selection (:?natural_id record))
-                  #_(app/navigate @app-instance "company-sites"))}
-   name])
 
 (s/fdef make-investor-selection
   :args (s/cat :id number? :state map?)
