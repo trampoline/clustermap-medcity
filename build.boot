@@ -33,6 +33,10 @@
  '[crisptrutski.boot-cljs-test :refer [test-cljs]]
  )
 
+(import
+ '[java.time ZonedDateTime]
+ '[java.time.format DateTimeFormatter])
+
 (deftask build []
   (comp (speak)
         (cljs)))
@@ -47,7 +51,10 @@
 
 (deftask production []
   (task-options! cljs {:optimizations :advanced
-                       :compiler-options {:closure-defines {"goog.DEBUG" false}}
+                       :compiler-options {:closure-defines {"goog.DEBUG" false
+                                                            "clustermap.core.RAVEN_DSN" (System/getenv "RAVEN_DSN")
+                                                            "clustermap.core.RELEASE" (.. (ZonedDateTime/now)
+                                                                                          (format DateTimeFormatter/ISO_INSTANT))}}
                        :source-map true})
   identity)
 

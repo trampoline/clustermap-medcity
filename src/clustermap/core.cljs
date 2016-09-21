@@ -39,12 +39,17 @@
    [cljs.core.async :refer [chan <! put! sliding-buffer >!]]
    [schema.core :as s :refer-macros [defschema]]))
 
+(def RELEASE "@define {string}" "")
+(def RAVEN_DSN "@define {string}" "")
+
 ;; assume we are in dev-mode if there is repl support
 (def ^:private dev-mode (some-> js/window .-config .-repl))
 (when ^boolean js/goog.DEBUG
   (devtools/install! :all))
 (when-not ^boolean js/goog.DEBUG
-  (inspect (-> (js/Raven.config "https://878600a25b8942bcad31f3d8eaa51a71@app.getsentry.com/95447") .install)))
+  (inspect (-> (js/Raven.config ^string clustermap.core/RAVEN_DSN
+                                #js {:release ^string clustermap.core/RELEASE})
+               .install)))
 
 ;; the IApp object
 (def ^:private app-instance (atom nil))
