@@ -391,7 +391,12 @@
                                                     (when bounds
                                                       (swap! (app/get-state @app-instance) assoc-in [:map :controls :bounds] bounds)
 
-                                                      (make-boundaryline-selection boundaryline-id))))))
+                                                      ;;TODO is this used?
+                                                      (swap! (get-app-state-atom)
+                                                             update :dynamic-filter-spec filters/reset-filter)
+                                                      (make-boundaryline-selection boundaryline-id)
+                                                      (swap! (get-app-state-atom)
+                                                             (partial bvca-table/make-constituency-selection boundaryline-id)))))))
 
                                   :geotag-data nil
                                   :geotag-agg-data nil}
@@ -695,7 +700,14 @@
         {:fetch-boundarylines-fn (partial bl/get-or-fetch-best-boundarylines (app/get-state app) :boundarylines)
          :get-cached-boundaryline-fn (partial bl/get-cached-boundaryline (app/get-state app) :boundarylines)
          :point-in-boundarylines-fn (partial bl/point-in-boundarylines (app/get-state app) :boundarylines :uk_boroughs)
-         :path-marker-click-fn make-boundaryline-selection
+         :path-marker-click-fn (fn [bid]
+                                 ;;TODO: refactor unify this as it is repeated
+                                 (when bid
+                                   (swap! (get-app-state-atom)
+                                          update :dynamic-filter-spec filters/reset-filter)
+                                   (make-boundaryline-selection bid)
+                                   (swap! (get-app-state-atom)
+                                          (partial bvca-table/make-constituency-selection bid))))
          :table-chan (chan)
          :stats-chan (chan)})
 
