@@ -515,6 +515,7 @@
                                                        :index-type "investment"
                                                        :title "Constituency"
                                                        :sort-spec {:!company_name {:order "desc"}}
+                                                       :data-munge-fn bvca-table/group-investor-branches
                                                        :fields [:?investment_uid :!company_name :?company_site_postcode
                                                                 :?company_site_purpose
                                                                 :?investor_company_name :?investor_company_uid
@@ -525,34 +526,40 @@
                                                        :from 0
                                                        :size 50
                                                        :columns [
-                                                                 {:key :!company_name :sortable false :label "Investor-backed company" :render-fn company-link-render-fn}
+                                                                 {:key :!company_name :sortable true
+                                                                  :label "Investor-backed company"
+                                                                  :render-fn company-link-render-fn}
                                                                  {:key :?investor_company_name
                                                                   :sortable false
                                                                   :render-fn (fn [n rec]
-                                                                               (investor-link-render-fn n rec))
+                                                                               (investor-links-render-fn2 (:investors rec) rec))
                                                                   :label "Investor"}
                                                                  {:key :?company_site_purpose
                                                                   :sortable false
                                                                   :render-fn (fn [n rec]
                                                                                (case n
-                                                                                 "hq" "Portfolio company"
+                                                                                 "hq" "Company Headquarters"
                                                                                  "branch" "Branch"
                                                                                  ""))
                                                                   :label "Site Type"}
+                                                                 {:key :?company_site_postcode
+                                                                  :sortable false
+                                                                  :label "Postcode"
+                                                                  }
                                                                  {:key :?boundaryline_compact_name
                                                                   :sortable false
                                                                   :label "Constituency"
                                                                   }
                                                                  {:key :!latest_turnover
                                                                   :sortable true
-                                                                  :label (fn [] [:div "Latest turnover\u0020" [:small "(UK-wide)"]])
+                                                                  :label (fn [] [:div "Latest turnover\u0020" [:small ""]])
                                                                   :right-align true
-                                                                  :render-fn #(num/mixed % {:curr "£"})}
+                                                                  :render-fn #(num/mixed % {:curr "£" :default "No data" :zero-is-nil? true})}
                                                                  {:key :!latest_employee_count
                                                                   :sortable true
-                                                                  :label (fn [] [:div "Latest employees\u0020" [:small "(UK-wide)"]])
+                                                                  :label (fn [] [:div "Latest employees\u0020" [:small ""]])
                                                                   :right-align true
-                                                                  :render-fn #(num/mixed %)}]}
+                                                                  :render-fn #(num/mixed % {:default "No data" :zero-is-nil? true})}]}
                                             :table-data nil}}}
 
    :geo-sponsors {:controls {:max-count 1}
