@@ -493,12 +493,24 @@
                                                   :index-type "investment"
                                                   :title "Investor"
                                                   :sort-spec {:!company_name {:order "desc"}}
-                                                  :fields [:?investment_uid :!company_name :?company_site_postcode :?investor_company_name :?company_no :?natural_id :!latest_turnover :!latest_employee_count :?boundaryline_compact_name :?boundaryline_id]
+                                                  :fields [:?investment_uid :!company_name :?company_site_postcode
+                                                           :?investor_company_name :?company_no :?natural_id
+                                                           :!latest_turnover :!latest_employee_count
+                                                           :?boundaryline_compact_name :?boundaryline_id
+                                                           :?company_site_purpose]
                                                   :from 0
                                                   :size 50
                                                   :columns [
                                                             {:key :!company_name :sortable false :label "Investor-backed company" :render-fn company-link-render-fn}
                                                             {:key :?investor_company_name :sortable false :label "Investor"}
+                                                            {:key :?company_site_purpose
+                                                             :sortable true
+                                                             :render-fn (fn [n rec]
+                                                                          (case n
+                                                                            "hq" "Company Headquarters"
+                                                                            "branch" "Branch"
+                                                                            ""))
+                                                             :label "Site Type"}
                                                             {:key :?boundaryline_compact_name
                                                              :sortable false
                                                              :label "Constituency"
