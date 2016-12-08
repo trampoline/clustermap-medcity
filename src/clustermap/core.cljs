@@ -224,7 +224,7 @@
                                             :type :tag-checkboxes
                                             :label "Segments"
                                             :sorted true
-                                            :visible false
+                                            :visible true
                                             :controls true
                                             :tag-type "bis_l1p1_sector"
                                             :tags [{:value "IBA" :label "Bio fuels"}
@@ -236,14 +236,12 @@
                                                    {:value "IBG" :label "Personal Care/ Cosmetics"}
                                                    {:value "IBH" :label "Specialist Services"}
                                                    {:value "IBI" :label "Agro-Industry"}
-                                                   {:value "IBX" :label "Specialist Services"}
                                                    {:value "MBA" :label "Antibodies"}
                                                    {:value "MBB" :label "Therapeutic Proteins"}
                                                    {:value "MBC" :label "Advanced Therapy Medicinal Products (ATMPs)"}
                                                    {:value "MBD" :label "Vaccines"}
                                                    {:value "MBE" :label "Small Molecules"}
                                                    {:value "MBF" :label "Blood & Tissue Products"}
-                                                   {:value "MBG" :label "Specialist Services"}
                                                    {:value "MBX" :label "Specialist Suppliers/Supply Chain"}
                                                    {:value "MBZ" :label "Medical Biotechnology - Unclassified "}
                                                    {:value "MTA" :label "Wound Care and Management "}
@@ -268,16 +266,8 @@
                                                    {:value "MTT" :label "Digital Health"}
                                                    {:value "MTU" :label "Professional services, Consultancy"}
                                                    {:value "MTV" :label "Education and Training"}
-                                                   {:value "MTX" :label "Specialist Suppliers/Supply Chain"}
                                                    {:value "MTZ" :label "Medical Technology - Unclassified "}
-                                                   {:value "PHA" :label "Antibodies"}
-                                                   {:value "PHB" :label "Therapeutic Proteins"}
                                                    {:value "PHC" :label "Advanced Therapy Medicinal Products (ATMPs)"}
-                                                   {:value "PHD" :label "Vaccines"}
-                                                   {:value "PHE" :label "Small Molecules"}
-                                                   {:value "PHF" :label "Blood & Tissue Products"}
-                                                   {:value "PHG" :label "Specialist Services"}
-                                                   {:value "PHX" :label "Specialist Services"}
                                                    {:value "PHZ" :label "Pharmaceutical - Unclassified"}
                                                    {:value "no_data" :label "No data"}
                                                    ]}
@@ -392,9 +382,9 @@
                                                    [:div.metric.metric-2
                                                     [:span.name "Emp"] [:span.value (num/compact (:latest_employee_count i))]]]])
                                :item-click-fn (fn [r e]
-                                                     (make-company-selection (:natural_id r))
-                                                     (app/navigate @app-instance "company")
-                                                     (.log js/console (clj->js ["CLICK" r e])))}
+                                                (make-company-selection (:natural_id r))
+                                                (app/navigate @app-instance "company")
+                                                (.log js/console (clj->js ["CLICK" r e])))}
 
                     :zoom nil
                     :bounds nil
