@@ -36,7 +36,7 @@
    [clustermap.util :as util :refer [inspect]]
    [clustermap.component-specs :as component-specs]
    [clustermap.bvca-table :as bvca-table]
-   [cljs.core.async :refer [chan <! put! sliding-buffer >!]]
+   [cljs.core.async :as async :refer [chan <! put! sliding-buffer >!]]
    [schema.core :as s :refer-macros [defschema]]))
 
 (def RELEASE "@define {string}" "")
@@ -60,6 +60,23 @@
       deref
       clustermap.app/get-state))
 
+(defn reset-zoom! []
+  (swap! (get-app-state-atom) ;; zoom out first (hack)
+         assoc-in
+         [:map :controls :bounds]
+         (get-in @(get-app-state-atom) [:map :controls :initial-bounds])))
+
+
+(defn fit-bounds
+  "Get current map markers and fit to bounds"
+  []
+  (let [app-state (get-app-state-atom)
+        map-controls (get-in @app-state [:map :controls])
+        leaflet-map  (:map map-controls)
+        markers (-> map-controls :markers deref)
+        marker-array (into-array (map :leaflet-marker (vals markers)))]
+    (when (seq markers)
+      (.fitBounds leaflet-map (.. (js/L.featureGroup marker-array)  getBounds)))))
 
 (defn boundaryline-filter
   [boundaryline-id]
@@ -73,8 +90,7 @@
         ch (when boundaryline-id
              (bl/get-or-fetch-boundaryline app-state :boundarylines boundaryline-id))]
     (go
-      (let [bl (when ch (<! ch))]
-        (.log js/console bl)
+      (if-let [bl (when ch (<! ch))]
         (let [bl-filter (when boundaryline-id (boundaryline-filter boundaryline-id))
               bl-name (when boundaryline-id (aget bl "compact_name"))
 
@@ -82,9 +98,11 @@
                                                                :boundaryline
                                                                bl-filter
                                                                bl-name
-                                                               boundaryline-id)]
-          (.log js/console (clj->js updated-filters))
-
+                                                               boundaryline-id)
+              leaflet-map (get-in @app-state [:map :controls :map])
+              bounds (map/geojson-point-bounds (first (aget (aget bl "envelope") "coordinates")))]
+          (.log js/console (util/pp updated-filters))
+          (.fitBounds leaflet-map bounds #js {:animate true})
           (swap! app-state
                  assoc-in
                  [:dynamic-filter-spec]
@@ -225,13 +243,40 @@
                            :base-filters {:all nil}
                            :composed {}}
 
-   :company-search {:controls {:search-fn api/company-search
-                               :render-fn (fn [r] [[:div (:name r)]])
-                               :col-headers nil ;; ["Name"]
+   :company-search {:controls {:search-fn #(if-not (str/blank? %)
+                                             (api/multi-search % {:search-fields ["postcode"]})
+                                             (api/multi-search))
+                               :render-fn (fn [r]
+                                            (case (:search-type r)
+                                              "company" [[:div (:name r)] [:div "Company"]]
+                                              "constituency" [[:div (:boundaryline_compact_name r)] [:div "Constituency"]]
+                                              "investor" [[:div (:investor_company_name r)] [:div "Investor"]]))
+                               :col-headers ["Name" "Type"]
                                :click-fn (fn [r]
-                                           ;; (make-company-selection (:natural_id r))
+                                           (case (:search-type r) ;; TODO: fitbounds on company and invetstor
+                                             "company" (do
+                                                         (reset-zoom!)
+                                                         (swap! (get-app-state-atom)
+                                                                (partial bvca-table/make-company-selection (:natural_id r)))
+                                                         (go
+                                                           (<! (async/timeout 1000))
+                                                           (fit-bounds)))
+                                             "constituency" (do
+                                                              (swap! (get-app-state-atom)
+                                                                     update :dynamic-filter-spec filters/reset-filter)
+                                                              (make-boundaryline-selection (:boundaryline_id r))
+                                                              (swap! (get-app-state-atom)
+                                                                     (partial bvca-table/make-constituency-selection (:boundaryline_id r))))
+                                             "investor" (do (reset-zoom!)
+                                                            (swap! (get-app-state-atom)
+                                                                   (partial bvca-table/make-investor-selection (or (:investor_company_uid r)
+                                                                                                                   (:?investor_company_uid r))))
+                                                            (go
+                                                              (<! (async/timeout 1000))
+                                                              (fit-bounds))))
                                            #_(app/navigate @app-instance "company"))
                                }
+                    :placeholder "Search"
                     :query nil
                     :results nil}
 
@@ -590,11 +635,7 @@
                    :class "btn btn-primary"}
 
    :reset-map-view {:text "Reset view"
-                    :action (fn [e]
-                              (swap! (get-app-state-atom)
-                                     assoc-in
-                                     [:map :controls :bounds]
-                                     (get-in @(get-app-state-atom) [:map :controls :initial-bounds])))
+                    :action (fn [e] (reset-zoom!))
                     :class "btn btn-default"}
 
    :reset-all {:content (constantly [:h1.logo "MedCity"])
