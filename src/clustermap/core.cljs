@@ -267,7 +267,6 @@
                                                    {:value "MTU" :label "Professional services, Consultancy"}
                                                    {:value "MTV" :label "Education and Training"}
                                                    {:value "MTZ" :label "Medical Technology - Unclassified "}
-                                                   {:value "PHC" :label "Advanced Therapy Medicinal Products (ATMPs)"}
                                                    {:value "PHZ" :label "Pharmaceutical - Unclassified"}
                                                    {:value "no_data" :label "No data"}
                                                    ]}
@@ -540,7 +539,7 @@
                              :time-variable "?accounts_date"
                              :metrics {:variable :!turnover :title "Turnover (UK-wide) (£)" :metric :sum}
                              :interval "year"
-                             :before "2013-01-01"}
+                             :before "2016-01-01"}
                      :color "#28828a"
                      :timeline-data nil}
 
