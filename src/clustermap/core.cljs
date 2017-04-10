@@ -682,7 +682,7 @@
    :reset-all {:content (constantly [:h1.logo "MedCity"])
                :action (fn [e]
                          (js/console.log "reset all")
-                         (.preventDefault e)
+                         (some-> e .preventDefault)
 
                          (reset! (get-app-state-atom)
                                  (-> @(get-app-state-atom)

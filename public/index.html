@@ -22,6 +22,9 @@
     <meta name="author" content="Trampoline Systems Ltd">
     <link type="text/css" rel="stylesheet" href="http://api.tiles.mapbox.com/mapbox.js/v1.6.4/mapbox.css">
     <link type="text/css" rel="stylesheet" href="css/app.css">
+    <link type="image/png" rel="icon" sizes="16x16" href="http://www.medcityhq.com/wp-content/themes/medcity/assets/images/favicons/favicon-16x16.png">
+    <link type="image/png" rel="icon" sizes="32x32" href="http://www.medcityhq.com/wp-content/themes/medcity/assets/images/favicons/favicon-32x32.png">
+    <link type="image/png" rel="icon" sizes="96x96" href="http://www.medcityhq.com/wp-content/themes/medcity/assets/images/favicons/favicon-96x96.png">
     <script type="text/javascript" src="js/polyfills.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.2.min.js"></script><!--[if lte IE 7]>
     <script type="text/javascript">$(document).ready(function(){ $('html').addClass('ie7'); });</script><![endif]-->
@@ -72,6 +75,7 @@
             </div>
             <ul class="nav-links">
               <li class="link-intro"><a href="#">Introduction</a></li>
+              <li id="add-yourself" class="link-add-yourself"><a href="#" onclick="$('#page-add-yourself').modal()">Add yourself</a></li>
               <li class="link-login">
                 <!-- a(href="#") Login-->
               </li>
@@ -400,26 +404,42 @@
         </div>
       </div>
     </div>
+    <div id="page-add-yourself" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+            <h4>Add yourself</h4>
+          </div>
+          <div id="page-add-yourself-content" class="modal-body">
+            <p>
+              Can’t find yourself on the map? Please fill out the
+              short form at below link if you are a life
+              science/healthcare company currently not listed on
+              www.medcitymap.com and we will add you in due course.
+            </p>
+            <p><a href="https://docs.google.com/forms/d/e/1FAIpQLScbIgWEKtLBBaK4ZzT0NTlXbxLTC_fDDZAxK0xCuTHVoP2dTA/viewform" target="_blank">Form</a>
+              
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
     <!--begin-static-base-js-->
-    <script type="text/javascript" src="cljs/goog/base.js"></script>
     <!--end-static-base-js-->
     <!--base-js
     {{{base-js}}}
     
     -->
-    <!--begin-static-dynamic-js--><script type="text/javascript" src="clustermap.js"></script><script type="text/javascript">goog.require("clustermap.core");</script>
+    <!--begin-static-dynamic-js--><script type="text/javascript" src="clustermap.js"></script>
     <!--end-static-dynamic-js-->
     <!--dynamic-js
-    <script type="text/javascript" src="clustermap.js"></script><script type="text/javascript">goog.require("clustermap.core");</script>
+    <script type="text/javascript" src="clustermap.js"></script>
     
     -->
     <!--begin-static-repl-js-->
     <!--end-static-repl-js-->
-    <!--repl-js
-    <script type="text/javascript">{{{repl-js}}}</script>
-    
-    
-    -->
+    <!--repl-js-->
     <script type="text/javascript">
       $(function(){
       
