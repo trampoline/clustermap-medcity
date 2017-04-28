@@ -638,10 +638,9 @@
                     :action (fn [e] (reset-zoom!))
                     :class "btn btn-default"}
 
-   :reset-all {:content (constantly [:h1.logo "MedCity"])
-               :action (fn [e]
+   :reset-all {:content (constantly [:h1.logo ""])
+               :action (fn [app owner]
                          (js/console.log "reset all")
-                         (.preventDefault e)
 
                          (reset! (get-app-state-atom)
                                  (-> @(get-app-state-atom)
