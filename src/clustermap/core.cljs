@@ -6,6 +6,7 @@
    [clojure.spec :as sp]
    [om.core :as om :include-macros true]
    [devtools.core :as devtools]
+   [domina.events :as events]
    [clustermap.api :as api]
    [clustermap.app :as app]
    [clustermap.filters :as filters]
@@ -163,6 +164,28 @@
                   ;; (inspect (make-boundaryline-selection (:?boundaryline_id record)))
                   #_(app/navigate @app-instance "company-sites"))}
    name])
+
+(defn handle-constituency [e]
+  (get-app-state-atom)
+  (inspect e (:boundaryline_id e))
+  (swap! (get-app-state-atom) update :dynamic-filter-spec filters/reset-filter)
+  (make-boundaryline-selection (:boundaryline_id e))
+  (swap! (get-app-state-atom)
+         (partial bvca-table/make-constituency-selection (:boundaryline_id e))))
+
+(defn handle-constituency-event
+  "Call make-company-selection when app-instance is not nil. If it is
+  nil then wait 5 seconds and try again. Using an atom watch doesn't
+  work because the company id gets overridden if set too early"
+  [e]
+  (if @app-instance
+    (handle-constituency e)
+    (do
+      (js/setTimeout (fn [] (when @app-instance
+                              (handle-constituency e)))
+                     5000))))
+
+(events/listen! :clustermap-bvca-constituency handle-constituency-event)
 
 (defn sign-icon
   [n]
