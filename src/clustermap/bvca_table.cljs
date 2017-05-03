@@ -34,8 +34,6 @@
                  (assoc-in [:table :current-table] :sites-table)
                  ;; below seems to have no effect
                  ;; (assoc-in [:table :tables :sites-table :controls :natural-id] natural-id)
-                 #_(update-in [:selection-filter-spec]
-                              merge {:components components :composed composed})
                  (assoc-in [:headline-stats :controls :current-mode] :company)
                  (update-in [:dynamic-filter-spec]
                             merge {:components dyn-components :composed dyn-composed})))))
@@ -74,12 +72,12 @@
         dyn-base-filters (get-in state [:selection-filter-spec :base-filters])
         dyn-composed     (filters/compose-filters dyn-components dyn-base-filters)
         ]
-    (inspect (-> state :table :tables :investors-table))
     (-> state
         (assoc-in [:table :current-table] :constituencies-table)
         (assoc-in [:headline-stats :controls :current-mode] :constituency)
         (update-in [:dynamic-filter-spec]
-                   merge {:components dyn-components :composed dyn-composed}))))
+                   merge {;;:components dyn-components ;; why not this?
+                          :composed dyn-composed}))))
 
 (defn report-check [res]
   ;; (println (type res))
