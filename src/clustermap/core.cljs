@@ -401,9 +401,9 @@
                                                     [:span.name "Emp"] [:span.value (num/compact (:latest_employee_count i))]]]])
                                :item-click-fn (fn [r e]
                                                 (swap! (get-app-state-atom)
-                                                       (partial bvca-table/make-company-selection (:?natural_id r)))
+                                                       (partial bvca-table/make-company-selection (:natural_id r)))
                                                 ;; (app/navigate @app-instance "company")
-                                                (.log js/console (clj->js ["CLICK" r e])))}
+                                                (.log js/console (util/pp ["CLICK" r e])))}
 
                     :zoom nil
                     :bounds nil
@@ -411,10 +411,11 @@
                     ::map/points-max-count 1200
                     :boundaryline-collection nil
                     :boundaryline-agg {:type :stats
-                                       :index "companies"
-                                       :index-type "company"
+                                       :index "company-sites"
+                                       :index-type "company_site"
                                        :key "boundaryline_id"
                                        :variable "!latest_employee_count"
+                                       :filter-munge-fn filters/munge-filter-for-investments
                                        ;; :scale-attr "population"
                                        }
                     :colorchooser {:scheme [:Reds :6]
@@ -423,8 +424,8 @@
 
                     :boundaryline-fill-opacity 0.4
 
-                    :geohash-aggs {:query {:index-name "companies"
-                                           :index-type "company"
+                    :geohash-aggs {:query {:index-name "company-sites"
+                                           :index-type "company_site"
                                            :geo-point-field "!location"}
                                    :show-at-zoom-fn (fn [z] (>= z 9))
                                    :precision-fn (fn [z] (- (/ z 2) 0.0))
@@ -490,12 +491,12 @@
                                                             :render-fn (fn [v] (num/mixed v))}
                                                            {:key :!latest_turnover
                                                             :metric :sum
-                                                            :label (fn [] [:p "Total latest turnover\u00A0" [:small "(UK-wide)"]])
+                                                            :label (fn [] [:p "Total latest turnover\u00A0" [:small ""]])
                                                             :render-fn (fn [v] (num/mixed v {:curr "£"}))}
 
                                                            {:key :!latest_employee_count
                                                             :metric :sum
-                                                            :label (fn [] [:p "Total latest employees\u00A0" [:small "(UK-wide)"]])
+                                                            :label (fn [] [:p "Total latest employees\u00A0" [:small ""]])
                                                             :render-fn (fn [v] (num/mixed v))}
                                                            ]}}
                     :summary-stats nil
