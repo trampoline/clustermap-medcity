@@ -107,7 +107,15 @@
           (swap! app-state
                  assoc-in
                  [:dynamic-filter-spec]
-                 updated-filters))))))
+                 updated-filters))
+        ;;else
+        (do
+          (when (and (exists? js/Raven) (js/Raven.isSetup))
+            (js/Raven.captureMessage
+             (str "Got nil from boundaryline channel")
+             #js {:extra #js {:boundaryline-id boundaryline-id}}))
+          (js/console.warn "Got nil from boundaryline channel"))
+        ))))
 
 (defn company-link-render-fn
   [name record]
