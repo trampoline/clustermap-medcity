@@ -77,7 +77,7 @@
         markers (-> map-controls :markers deref)
         marker-array (into-array (map :leaflet-marker (vals markers)))]
     (when (seq markers)
-      (.fitBounds leaflet-map (.. (js/L.featureGroup marker-array)  getBounds)))))
+      (.fitBounds leaflet-map (.. (js/L.featureGroup marker-array) getBounds) #js {:maxZoom 14}))))
 
 (defn boundaryline-filter
   [boundaryline-id]
@@ -337,7 +337,7 @@
          ;; :boundaryline-collections [[0 "nuts_2"] [8 "nuts_3"] [9 "uk_boroughs"] [11 "uk_wards"]]
          ;; :boundaryline-collections [[0 "nuts_2"] [8 "nuts_3"] [9 "nutsish_4"] [11 "nutsish_5"]]
          ;; :boundaryline-collections [[0 "uk_boroughs"] [10 "uk_wards"]]
-         :boundaryline-collections [[0 "nuts_1"][9 "uk_constituencies"] #_[11 "uk_wards"]]
+         :boundaryline-collections [[0 "nuts_1"][7 "uk_constituencies"] #_[11 "uk_wards"]]
          :controls {:initial-bounds  [[58.7 5.3] [49.29 -11.29]]
                     :map-options {:zoomControl true
                                   :dragging true
@@ -774,7 +774,7 @@
         (load-boundaryline-collection-indexes (app/get-state app))
         {:fetch-boundarylines-fn (partial bl/get-or-fetch-best-boundarylines (app/get-state app) :boundarylines)
          :get-cached-boundaryline-fn (partial bl/get-cached-boundaryline (app/get-state app) :boundarylines)
-         :point-in-boundarylines-fn (partial bl/point-in-boundarylines (app/get-state app) :boundarylines :uk_boroughs)
+         :point-in-boundarylines-fn (partial bl/point-in-boundarylines (app/get-state app) :boundarylines :uk_constituencies)
          :path-marker-click-fn (fn [bid]
                                  ;;TODO: refactor unify this as it is repeated
                                  (when bid
