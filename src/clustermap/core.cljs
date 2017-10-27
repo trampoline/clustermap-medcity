@@ -47,9 +47,10 @@
   (inspect "debug")
   (devtools/install! :all))
 (when-not ^boolean js/goog.DEBUG
-  (inspect (-> (js/Raven.config ^string clustermap.core/RAVEN_DSN
-                                #js {:release ^string clustermap.core/RELEASE})
-               .install)))
+  (when (exists? js/Raven)
+    (inspect (-> (js/Raven.config ^string clustermap.core/RAVEN_DSN
+                                  #js {:release ^string clustermap.core/RELEASE})
+                 .install))))
 
 (if ^boolean js/goog.DEBUG (devtools/install!))
 
@@ -752,9 +753,8 @@
                     :class "btn btn-default"}
 
    :reset-all {:content (constantly [:h1.logo "Tech Map London"])
-               :action (fn [e]
+               :action (fn [app owner]
                          (js/console.log "reset all")
-                         (.preventDefault e)
 
                          (reset! (get-app-state-atom)
                                  (-> @(get-app-state-atom)

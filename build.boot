@@ -11,7 +11,7 @@
                  [org.clojure/test.check "0.9.0" :scope "test"]
 
                  [org.clojure/clojure "1.9.0-alpha5"]
-                 [org.clojure/clojurescript "1.9.229" #_"1.9.495"]
+                 [org.clojure/clojurescript "1.9.521"]
                  [org.clojure/core.async "0.3.442"]
                  [com.taoensso/timbre "4.8.0"]
                  [org.omcljs/om "1.0.0-alpha36"]
