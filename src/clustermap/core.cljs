@@ -590,7 +590,7 @@
                              :time-variable "?accounts_date"
                              :metrics {:variable :!turnover :title "Turnover by reported year (£)" :metric :sum}
                              :interval "year"
-                             :before "2013-01-01"}
+                             :before "2017-01-01"}
                      :point-formatter (chart-helpers/mk-tooltip-point-formatter {})
                      :color "#b71300"
                      :timeline-data nil}
